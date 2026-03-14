@@ -1,0 +1,48 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="footer__inner container">
+    <span class="footer__copy">&copy; {year} Yanming Shao</span>
+    <span class="footer__note">
+      <span data-lang-en>Works: BimanGrasp, SynPolDex / Music: Lake</span>
+      <span data-lang-zh>作品：BimanGrasp、SynPolDex / 音乐：Lake</span>
+      <span data-lang-ja>作品: BimanGrasp・SynPolDex / 音楽: Lake</span>
+    </span>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    border-top: 1px solid var(--c-border);
+    margin-top: 6.5rem;
+    padding: 2.2rem 0;
+    background:
+      linear-gradient(180deg, transparent, color-mix(in srgb, var(--surface-glass-a) 45%, transparent));
+    backdrop-filter: blur(4px);
+  }
+
+  .footer__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.82rem;
+    color: var(--c-text-muted);
+    gap: 1rem;
+  }
+
+  .footer__note {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 640px) {
+    .footer__inner {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>

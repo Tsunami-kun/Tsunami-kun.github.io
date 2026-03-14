@@ -1,0 +1,279 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import WorkCard from '@/components/WorkCard.astro';
+import { getCollection } from 'astro:content';
+import { withBase } from '@/lib/withBase';
+
+const visibleWorkIds = new Set(['bimangrasp', 'synpoldex']);
+const works = (await getCollection('works'))
+  .filter((work) => visibleWorkIds.has(work.id))
+  .sort((a, b) => b.data.year - a.data.year);
+const featuredWork = works[0];
+---
+
+<BaseLayout title="Works — Yanming Shao">
+  <section class="works container">
+    <header class="works__header" data-reveal>
+      <span class="works__marker" aria-hidden="true">04</span>
+
+      <div class="works__board">
+        <div class="works__summary">
+          <span class="works__label">
+            <span data-lang-en>Research Index</span>
+            <span data-lang-zh>研究索引</span>
+            <span data-lang-ja>研究索引</span>
+          </span>
+          <h1>
+            <span data-lang-en>Works</span>
+            <span data-lang-zh>作品</span>
+            <span data-lang-ja>作品集</span>
+          </h1>
+          <p class="works__subtitle" data-lang-en-block>
+            Two selected papers on dexterous grasping and finger coordination.
+          </p>
+          <p class="works__subtitle" data-lang-zh-block>
+            只保留两篇最能代表当前方向的工作：双手抓取与手指协同。
+          </p>
+          <p class="works__subtitle" data-lang-ja-block>
+            現在の方向を最もよく表す二つの仕事だけを置いています。双手把持と指の協調です。
+          </p>
+        </div>
+
+        {featuredWork && (
+          <a href={withBase(`/works/${featuredWork.id}`)} class="works__preview">
+            <span class="works__pin" aria-hidden="true"></span>
+            <img
+              src={withBase(featuredWork.data.thumbnail)}
+              alt={featuredWork.data.title}
+              class="works__preview-img"
+              loading="lazy"
+            />
+            <div class="works__preview-meta">
+              <span class="works__preview-tag">
+                <span data-lang-en>Current</span>
+                <span data-lang-zh>当前</span>
+                <span data-lang-ja>現在</span>
+              </span>
+              <p>{featuredWork.data.title}</p>
+            </div>
+          </a>
+        )}
+      </div>
+    </header>
+
+    <div class="grid-2" data-reveal>
+      {works.map((work) => (
+        <WorkCard
+          slug={work.id}
+          title={work.data.title}
+          description={work.data.description}
+          thumbnail={work.data.thumbnail}
+          category={work.data.category}
+          year={work.data.year}
+          metrics={[]}
+        />
+      ))}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .works {
+    padding-top: clamp(3.2rem, 8vh, 6rem);
+    padding-bottom: 3rem;
+  }
+
+  .works__header {
+    position: relative;
+    margin-bottom: 1.8rem;
+  }
+
+  .works__marker {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.4rem;
+    height: 3rem;
+    padding: 0 0.5rem;
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    color: #efe4d8;
+    background:
+      linear-gradient(180deg, rgba(122, 67, 42, 0.96), rgba(80, 41, 29, 0.96));
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow:
+      0 12px 20px -14px rgba(0, 0, 0, 0.75),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+
+  .works__marker::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 -0.75rem;
+    margin: 0 auto;
+    width: 0;
+    height: 0;
+    border-left: 0.8rem solid transparent;
+    border-right: 0.8rem solid transparent;
+    border-top: 0.8rem solid rgba(80, 41, 29, 0.96);
+  }
+
+  .works__board {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(240px, 0.72fr);
+    gap: 1.2rem;
+    padding: 1.1rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background:
+      linear-gradient(180deg, rgba(18, 18, 20, 0.82), rgba(24, 25, 29, 0.9));
+    box-shadow: 0 34px 60px -46px rgba(0, 0, 0, 0.75);
+    overflow: hidden;
+  }
+
+  .works__board::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent),
+      url('/art/hero-night.png') center / cover no-repeat;
+    opacity: 0.08;
+    mix-blend-mode: screen;
+  }
+
+  .works__summary,
+  .works__preview {
+    position: relative;
+    z-index: 1;
+    background:
+      linear-gradient(180deg, rgba(244, 239, 230, 0.97), rgba(228, 220, 207, 0.95));
+    border: 1px solid rgba(92, 80, 66, 0.28);
+    box-shadow:
+      0 22px 34px -30px rgba(0, 0, 0, 0.65),
+      0 1px 0 rgba(255, 255, 255, 0.4) inset;
+  }
+
+  .works__summary {
+    padding: 1.3rem 1.35rem 1.2rem;
+    transform: rotate(-1deg);
+  }
+
+  .works__label,
+  .works__preview-tag {
+    display: inline-flex;
+    margin-bottom: 0.8rem;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .works__label {
+    color: #7f302d;
+  }
+
+  .works__summary h1 {
+    margin-bottom: 0.5rem;
+    color: #221b16;
+  }
+
+  .works__subtitle {
+    color: #5c534a;
+    font-size: 0.98rem;
+    line-height: 1.75;
+    max-width: 42ch;
+  }
+
+  .works__preview {
+    display: block;
+    padding: 0.68rem;
+    transform: rotate(2deg);
+    text-decoration: none;
+    color: #201914;
+  }
+
+  .works__pin {
+    position: absolute;
+    top: 0.45rem;
+    left: 50%;
+    width: 0.82rem;
+    height: 0.82rem;
+    margin-left: -0.41rem;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #d5cdc4, #6b6055 62%, #2a211c 100%);
+    box-shadow:
+      0 2px 4px rgba(0, 0, 0, 0.45),
+      0 0 0 1px rgba(255, 255, 255, 0.14) inset;
+    z-index: 2;
+  }
+
+  .works__preview-img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    object-position: 50% 38%;
+    border: 1px solid rgba(95, 84, 71, 0.32);
+    filter: saturate(0.84) contrast(1.04);
+    animation: works-pan 20s ease-in-out infinite alternate;
+  }
+
+  .works__preview-meta {
+    padding: 0.75rem 0.15rem 0.1rem;
+  }
+
+  .works__preview-tag {
+    color: #131313;
+    background: rgba(249, 246, 238, 0.94);
+    padding: 0.24rem 0.56rem;
+    border: 1px solid rgba(100, 90, 78, 0.22);
+  }
+
+  .works__preview-meta p {
+    margin-top: 0.35rem;
+    color: #2f2924;
+    line-height: 1.45;
+  }
+
+  @media (max-width: 860px) {
+    .works__board {
+      grid-template-columns: 1fr;
+    }
+
+    .works__summary,
+    .works__preview {
+      transform: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .works {
+      padding-top: 2.4rem;
+    }
+
+    .works__marker {
+      top: 0.7rem;
+      left: 0.7rem;
+    }
+  }
+
+  @keyframes works-pan {
+    0% {
+      object-position: 50% 32%;
+    }
+
+    100% {
+      object-position: 50% 68%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .works__preview-img {
+      animation: none;
+    }
+  }
+</style>

@@ -1,0 +1,316 @@
+---
+import { withBase } from '@/lib/withBase';
+
+interface Props {
+  slug: string;
+  title: string;
+  description: string;
+  thumbnail: string;
+  category: string;
+  year: number;
+  metrics?: { label: string; value: string; progress?: number }[];
+}
+
+const { slug, title, description, thumbnail, category, year, metrics = [] } = Astro.props;
+const href = withBase(`/works/${slug}`);
+
+function generateSparkline(seed: string): string {
+  let hash = 0;
+  for (let i = 0; i < seed.length; i++) {
+    hash = ((hash << 5) - hash + seed.charCodeAt(i)) | 0;
+  }
+  const points: string[] = [];
+  for (let i = 0; i <= 8; i++) {
+    const x = (i / 8) * 80;
+    const y = 4 + Math.abs(Math.sin(hash * (i + 1) * 0.7)) * 12;
+    points.push(`${x.toFixed(1)},${y.toFixed(1)}`);
+  }
+  return points.join(' ');
+}
+---
+
+<a href={href} class="work-card">
+  <span class="work-card__pin" aria-hidden="true"></span>
+  <div class="work-card__thumb-wrap">
+    <img
+      src={withBase(thumbnail)}
+      alt={title}
+      class="work-card__thumb"
+      transition:name={`work-thumb-${slug}`}
+      loading="lazy"
+    />
+    <span class="work-card__category">{category}</span>
+  </div>
+
+  <div class="work-card__body">
+    <h3 class="work-card__title" transition:name={`work-title-${slug}`}>{title}</h3>
+    <p class="work-card__desc">{description}</p>
+
+    {metrics.length > 0 && (
+      <div class="work-card__metrics">
+        {metrics.map((m) => (
+          <div class="work-card__metric">
+            <div class="work-card__metric-head">
+              <span class="work-card__metric-label">{m.label}</span>
+              <span class="work-card__metric-value">{m.value}</span>
+            </div>
+            {m.progress !== undefined && (
+              <div class="work-card__bar-track">
+                <div class="work-card__bar-fill" style={`--bar-w: ${m.progress}%`} />
+              </div>
+            )}
+            {m.progress === undefined && (
+              <div class="work-card__sparkline">
+                <svg viewBox="0 0 80 20" preserveAspectRatio="none" class="work-card__spark-svg">
+                  <polyline
+                    points={generateSparkline(m.value)}
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    )}
+
+    <span class="work-card__year">{year}</span>
+  </div>
+</a>
+
+<script is:inline define:vars={{}}>
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.querySelectorAll('.work-card__bar-fill').forEach((bar) => {
+          bar.classList.add('animate');
+        });
+        observer.unobserve(entry.target);
+      });
+    }, { threshold: 0.3 });
+
+    document.addEventListener('astro:page-load', () => {
+      document.querySelectorAll('.work-card').forEach((card) => observer.observe(card));
+    });
+  }
+</script>
+
+<style>
+  .work-card {
+    display: block;
+    position: relative;
+    padding: 0.7rem;
+    background:
+      linear-gradient(180deg, rgba(244, 239, 230, 0.97), rgba(228, 220, 207, 0.95));
+    border: 1px solid rgba(92, 80, 66, 0.28);
+    overflow: hidden;
+    transition: border-color 0.35s, transform 0.35s var(--ease-out-expo), box-shadow 0.35s;
+    box-shadow:
+      0 22px 32px -30px rgba(0, 0, 0, 0.65),
+      0 1px 0 rgba(255, 255, 255, 0.4) inset;
+    transform: rotate(-0.8deg);
+  }
+
+  .work-card:hover {
+    border-color: rgba(128, 48, 43, 0.4);
+    transform: translateY(-6px) rotate(0deg);
+    box-shadow:
+      0 26px 38px -28px rgba(0, 0, 0, 0.75),
+      0 1px 0 rgba(255, 255, 255, 0.42) inset;
+  }
+
+  .work-card__pin {
+    position: absolute;
+    top: 0.42rem;
+    left: 50%;
+    width: 0.82rem;
+    height: 0.82rem;
+    margin-left: -0.41rem;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #d5cdc4, #6b6055 62%, #2a211c 100%);
+    box-shadow:
+      0 2px 4px rgba(0, 0, 0, 0.45),
+      0 0 0 1px rgba(255, 255, 255, 0.14) inset;
+    z-index: 2;
+  }
+
+  .work-card__thumb-wrap {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(95, 84, 71, 0.32);
+  }
+
+  .work-card__thumb-wrap::before {
+    content: '';
+    position: absolute;
+    top: -0.3rem;
+    right: 0.9rem;
+    width: 3.2rem;
+    height: 0.9rem;
+    background: rgba(214, 203, 185, 0.58);
+    border: 1px solid rgba(103, 91, 77, 0.12);
+    transform: rotate(6deg);
+    z-index: 1;
+  }
+
+  .work-card__thumb-wrap::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(180deg, rgba(10, 10, 10, 0) 50%, rgba(10, 10, 10, 0.24) 100%);
+  }
+
+  .work-card__thumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 38%;
+    filter: saturate(0.82) contrast(1.04);
+    transition: transform 0.6s var(--ease-out-expo), filter 0.6s var(--ease-out-expo);
+    animation: work-thumb-pan 18s ease-in-out infinite alternate;
+  }
+
+  .work-card:hover .work-card__thumb {
+    transform: scale(1.055);
+    filter: saturate(0.92) contrast(1.06);
+  }
+
+  .work-card__category {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    font-size: 0.66rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #131313;
+    background: rgba(249, 246, 238, 0.94);
+    padding: 0.24rem 0.56rem;
+    border: 1px solid rgba(100, 90, 78, 0.22);
+    box-shadow: 0 5px 10px -10px rgba(0, 0, 0, 0.6);
+  }
+
+  .work-card__body {
+    padding: 1.15rem 0.45rem 0.2rem;
+  }
+
+  .work-card__title {
+    font-size: 1.1rem;
+    margin-bottom: 0.45rem;
+    line-height: 1.25;
+    color: #201914;
+  }
+
+  .work-card__desc {
+    font-size: 0.88rem;
+    color: #5d544c;
+    line-height: 1.55;
+    margin-bottom: 0.85rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .work-card__metrics {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-bottom: 0.9rem;
+    padding-top: 0.9rem;
+    border-top: 1px solid rgba(76, 67, 58, 0.18);
+  }
+
+  .work-card__metric-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.25rem;
+  }
+
+  .work-card__metric-label {
+    font-size: 0.7rem;
+    color: #685d54;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .work-card__metric-value {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #7e2f2d;
+  }
+
+  .work-card__bar-track {
+    height: 4px;
+    background: rgba(35, 29, 24, 0.12);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .work-card__bar-fill {
+    height: 100%;
+    width: 0;
+    border-radius: 2px;
+    background: linear-gradient(90deg, #7f302d 0%, #b76b50 100%);
+    transition: width 0s;
+    box-shadow: 0 0 10px rgba(127, 48, 45, 0.2);
+  }
+
+  .work-card__bar-fill.animate {
+    width: var(--bar-w);
+    transition: width 1.2s var(--ease-out-expo);
+  }
+
+  .work-card__sparkline {
+    height: 20px;
+    opacity: 0.6;
+    color: #7f302d;
+  }
+
+  .work-card__spark-svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .work-card__year {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.4rem;
+    height: 2.4rem;
+    font-size: 0.76rem;
+    font-family: var(--font-mono);
+    letter-spacing: 0.06em;
+    color: #f4ece2;
+    background: rgba(28, 24, 22, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+
+  @keyframes work-thumb-pan {
+    0% {
+      object-position: 50% 32%;
+    }
+
+    100% {
+      object-position: 50% 68%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .work-card__thumb {
+      animation: none;
+    }
+  }
+</style>

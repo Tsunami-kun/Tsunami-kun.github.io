@@ -1,0 +1,47 @@
+<svg width="1600" height="920" viewBox="0 0 1600 920" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="skyDay" x1="800" y1="24" x2="800" y2="560" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#B7EAFF"/>
+      <stop offset="0.55" stop-color="#D8F4FF"/>
+      <stop offset="1" stop-color="#F3FDFF"/>
+    </linearGradient>
+    <linearGradient id="seaDay" x1="800" y1="520" x2="800" y2="920" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#8EDAFF"/>
+      <stop offset="0.52" stop-color="#5FC4F7"/>
+      <stop offset="1" stop-color="#2A89C7"/>
+    </linearGradient>
+    <radialGradient id="sunDay" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1270 145) rotate(87) scale(174 174)">
+      <stop offset="0" stop-color="#FFF8CC"/>
+      <stop offset="0.5" stop-color="#FFF0A8" stop-opacity="0.75"/>
+      <stop offset="1" stop-color="#FFF0A8" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="flareDay" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(990 280) rotate(82) scale(320 420)">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1600" height="920" fill="url(#skyDay)"/>
+  <circle cx="1270" cy="145" r="178" fill="url(#sunDay)"/>
+  <ellipse cx="980" cy="282" rx="420" ry="286" fill="url(#flareDay)"/>
+
+  <g opacity="0.86" fill="#FFFFFF">
+    <ellipse cx="226" cy="196" rx="128" ry="42"/>
+    <ellipse cx="324" cy="192" rx="98" ry="34"/>
+    <ellipse cx="1168" cy="218" rx="170" ry="48"/>
+    <ellipse cx="1302" cy="216" rx="108" ry="36"/>
+    <ellipse cx="760" cy="150" rx="120" ry="40"/>
+    <ellipse cx="858" cy="146" rx="90" ry="30"/>
+  </g>
+
+  <rect y="518" width="1600" height="402" fill="url(#seaDay)"/>
+  <path d="M0 532C128 544 208 522 324 532C440 542 536 566 660 560C780 554 904 524 1036 534C1168 544 1304 572 1432 562C1516 556 1564 546 1600 538V604H0V532Z" fill="#BDE8FF" fill-opacity="0.52"/>
+  <path d="M0 596C130 588 224 616 344 620C474 624 590 586 710 592C828 598 920 626 1050 628C1180 630 1308 604 1430 606C1518 608 1560 614 1600 620V684H0V596Z" fill="#D9F4FF" fill-opacity="0.44"/>
+  <path d="M0 672C146 662 240 688 364 692C478 696 574 666 690 670C810 674 924 700 1054 704C1180 708 1318 686 1438 688C1530 690 1574 696 1600 700V760H0V672Z" fill="#E9FAFF" fill-opacity="0.33"/>
+
+  <g opacity="0.62" fill="#FFFFFF">
+    <path d="M525 368C545 346 582 336 604 352C624 336 654 334 672 350C646 348 614 362 604 382C589 366 553 356 525 368Z"/>
+    <path d="M690 314C707 296 736 289 756 302C774 288 802 288 818 302C794 302 770 318 760 334C749 318 716 304 690 314Z"/>
+    <path d="M1006 356C1024 338 1058 330 1082 344C1102 330 1138 330 1156 348C1124 344 1098 362 1088 380C1078 362 1038 348 1006 356Z"/>
+  </g>
+</svg>

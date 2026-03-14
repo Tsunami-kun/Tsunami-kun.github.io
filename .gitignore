@@ -1,0 +1,23 @@
+node_modules/
+dist/
+.astro/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Local source assets and private archives that should not go to GitHub Pages
+/*.zip
+/*.7z
+/*.rar
+/*.pdf
+/CLAUDE.md
+/lake.mp3
+/background.png
+/background_day.jpg
+/background_night.jpg
+/alice.jpg
+/close up!.jpeg
+/*.avif
+/public/audio/lake.mp3
+/public/audio/lofi-bg.mp3

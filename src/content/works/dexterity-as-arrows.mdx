@@ -1,0 +1,69 @@
+---
+title: "Dexterity-as-Arrows — Safety Shields from Referential Transparency"
+description: "If your dynamics simulator is a pure function, you get safety for free: zero model mismatch, inductive invariant proofs, and a 0% violation rate that actually improves task success."
+thumbnail: "/thumbs/dexterity-arrows-teaser.png"
+category: "Paper"
+year: 2025
+metrics:
+  - { label: "Violation Rate", value: "0%", progress: 0 }
+  - { label: "Task Success", value: "83%", progress: 83 }
+  - { label: "Pure Python", value: "~1200 LOC" }
+links:
+  - { label: "Under Review", url: "#" }
+---
+
+## The Purity-Safety Connection
+
+Here is a deceptively simple observation: if your dynamics simulator is a **pure function** — no hidden state, no side effects — then a safety shield that calls it as a one-step oracle gets a prediction *identical* to what actually happens. The model mismatch is zero. Not approximately zero. **Exactly zero.** By referential transparency.
+
+This paper builds **FP-dex**, a system that turns this observation into a practical safety framework for stochastic manipulation policies.
+
+## Arrowized Controller Composition
+
+Drawing from the functional reactive programming (FRP) tradition, we structure the controller as a composition of **Arrow signal functions**:
+
+```
+controller = dup >>> first policy >>> swap >>> shield
+```
+
+Policy, shield, and plumbing are all pure stream transformers composed via `>>>`, `first`, `arr`. All state is frozen algebraic data; transitions are pure functions; stochasticity is confined to an explicitly threaded PRNG key.
+
+## Three-Layer Predictive Shield
+
+The safety system operates in three layers:
+
+1. **Action magnitude cap** — hard-clips actions to a fraction of the physical limit
+2. **Rate limiter** — bounds the maximum change between consecutive actions
+3. **Predictive CBF layer** — runs the pure dynamics forward one step, checks force and velocity invariants, and uses binary search to find the largest safe action within the braking envelope
+
+Because the prediction is *exact* (by purity), the inductive safety proof carries no accumulated error term.
+
+## Formal Guarantees
+
+We prove two main theorems:
+
+- **Theorem 1 (Inductive Safety):** Force and velocity bounds hold for all time steps, with zero accumulated model error
+- **Theorem 2 (Safety-Liveness Tradeoff):** We characterize the exact boundary where safety and progress become incompatible, parametrized by stiffness, mass, and force budget
+
+## The Counterintuitive Result: Safety Improves Performance
+
+Across 900 adversarial episodes:
+
+| Metric | Baseline | Shielded | Shielded + Retuned |
+|--------|----------|----------|-------------------|
+| Success rate | 48.3% | 81.7% | **83.0%** |
+| Violation rate | 100% | **0%** | 0.3% |
+| Mean violations/episode | 182.4 | 0.0 | 0.01 |
+| Mean completion steps | 247.7 | 148.5 | **151.2** |
+
+The shield doesn't just prevent bad outcomes — it acts as an **implicit regularizer**, pruning high-variance trajectory tails and concentrating execution on paths with monotonic progress. Safety literally makes the policy faster.
+
+## CEGAR-Style Policy Retuning
+
+Property-based testing (in the QuickCheck tradition) generates adversarial counterexamples that the pure simulator can deterministically replay. A CEGAR-style loop identifies three archetype failure modes — "The Stiff Wall," "The Featherweight," and "The Tight Corridor" — and retunes the policy via grid search over gain and noise scales.
+
+## Qualitative Validation
+
+Beyond the 1D peg-in-hole benchmark, we demonstrate multi-object dexterous grasping in the **SAPIEN** simulator with a bimanual UR5e + XHand system across five object categories: bottles, bowls, cellphones, cameras, and headphones.
+
+**Target Venue:** ICFP 2026 (Functional Pearl)

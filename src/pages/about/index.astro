@@ -1,0 +1,329 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { withBase } from '@/lib/withBase';
+---
+
+<BaseLayout title="About — Yanming Shao">
+  <section class="about container">
+    <div class="about__visual">
+      <!-- Artwork by 6VCR (Eugenia Goncharova) — https://6vcr.com -->
+      <img
+        src={withBase('/art/hero-day.jpg')}
+        alt=""
+        class="about__visual-img about__visual-img--day"
+        aria-hidden="true"
+      />
+      <img
+        src={withBase('/art/hero-night.png')}
+        alt=""
+        class="about__visual-img about__visual-img--night"
+        aria-hidden="true"
+      />
+      <div class="about__visual-grid" aria-hidden="true"></div>
+
+      <div class="about__chip about__chip--left">
+        <span data-lang-en>Research</span>
+        <span data-lang-zh>研究</span>
+        <span data-lang-ja>研究</span>
+      </div>
+      <div class="about__chip about__chip--center">
+        <span data-lang-en>Art & Music</span>
+        <span data-lang-zh>画与音乐</span>
+        <span data-lang-ja>絵と音楽</span>
+      </div>
+      <div class="about__chip about__chip--right">
+        <span data-lang-en>26 Fall PhD</span>
+        <span data-lang-zh>26 Fall PhD</span>
+        <span data-lang-ja>26 Fall PhD</span>
+      </div>
+    </div>
+
+    <header class="about__header">
+      <p class="about__eyebrow"><span data-lang-en>About</span><span data-lang-zh>关于</span><span data-lang-ja>概要</span></p>
+      <h1>
+        <span data-lang-en-block>Yanming Shao works on dexterous hands<br />and embodied AI.</span>
+        <span data-lang-zh-block>邵彦铭研究灵巧手与具身智能。</span>
+        <span data-lang-ja-block>邵彦銘は巧緻なロボットハンドと<br />具身AIを研究しています。</span>
+      </h1>
+      <p class="about__lead" data-lang-en-block>
+        He is currently looking for Fall 2026 PhD opportunities. This site keeps a small record of papers, images, and music.
+      </p>
+      <p class="about__lead" data-lang-zh-block>
+        他正在寻找 2026 Fall PhD 机会。这个站点也用来放论文、画面和音乐。
+      </p>
+      <p class="about__lead" data-lang-ja-block>
+        現在、2026 Fall PhD の機会を探しています。このサイトは論文と絵と音楽の小さな記録でもあります。
+      </p>
+    </header>
+
+    <div class="about__cards">
+      <article class="about-card">
+        <h2><span data-lang-en>Research</span><span data-lang-zh>研究</span><span data-lang-ja>研究</span></h2>
+        <p data-lang-en-block>Bimanual grasp synthesis, finger coordination, and data generation for embodied manipulation.</p>
+        <p data-lang-zh-block>关注双手抓取生成、手指协同，以及面向具身操作的数据生成。</p>
+        <p data-lang-ja-block>双手把持生成、指の協調、そして具身操作のためのデータ生成に取り組んでいます。</p>
+      </article>
+      <article class="about-card">
+        <h2><span data-lang-en>Seeking</span><span data-lang-zh>方向</span><span data-lang-ja>進学先</span></h2>
+        <p data-lang-en-block>Looking for Fall 2026 PhD positions in embodied AI, dexterous manipulation, VLA, and agentic systems.</p>
+        <p data-lang-zh-block>正在寻找 2026 Fall PhD，方向包括具身智能、灵巧操作、VLA 与 agentic systems。</p>
+        <p data-lang-ja-block>Embodied AI、巧緻操作、VLA、agentic systems を軸にした 2026 Fall PhD を探しています。</p>
+      </article>
+      <article class="about-card">
+        <h2><span data-lang-en>Elsewhere</span><span data-lang-zh>站外</span><span data-lang-ja>そのほか</span></h2>
+        <p data-lang-en-block>Outside the lab: calligraphy, ruined landscapes, and long ambient tracks for late-night reading.</p>
+        <p data-lang-zh-block>实验之外，喜欢书法、带废墟感的画面，以及适合深夜阅读的长环境音乐。</p>
+        <p data-lang-ja-block>研究の外では、書、廃墟の気配をもつ絵、そして夜更けの読書に合う長い環境音が好きです。</p>
+      </article>
+    </div>
+
+    <div class="about__links">
+      <a href={withBase('/works')} class="about__link"><span data-lang-en>See Works</span><span data-lang-zh>看作品</span><span data-lang-ja>作品を見る</span> &rarr;</a>
+      <a href={withBase('/travelogue')} class="about__link"><span data-lang-en>Read Travelogue</span><span data-lang-zh>看游记</span><span data-lang-ja>旅行記を読む</span> &rarr;</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .about {
+    padding-top: clamp(3.2rem, 8vh, 6.2rem);
+  }
+
+  .about__visual {
+    position: relative;
+    min-height: clamp(210px, 36vw, 320px);
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid var(--c-border);
+    box-shadow:
+      0 24px 44px -30px var(--c-shadow),
+      0 1px 0 var(--surface-highlight) inset;
+  }
+
+  .about__visual::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(180deg, rgba(12, 22, 42, 0) 30%, rgba(12, 22, 42, 0.3) 100%);
+  }
+
+  .about__visual-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 40%;
+    transition: opacity var(--theme-switch-ms) var(--theme-switch-ease), transform var(--theme-switch-ms) var(--theme-switch-ease);
+    animation: about-pan 24s ease-in-out infinite alternate;
+  }
+
+  .about__visual-img--night {
+    opacity: 0;
+    transform: scale(1.04);
+  }
+
+  :root[data-theme='night'] .about__visual-img--day {
+    opacity: 0;
+    transform: scale(1.03);
+  }
+
+  :root[data-theme='night'] .about__visual-img--night {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .about__visual-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 28px 28px;
+    mix-blend-mode: soft-light;
+  }
+
+  .about__chip {
+    position: absolute;
+    z-index: 2;
+    padding: 0.35rem 0.65rem;
+    border-radius: 999px;
+    border: 1px solid var(--c-border);
+    background: linear-gradient(120deg, var(--surface-glass-a), var(--surface-glass-b));
+    backdrop-filter: blur(6px);
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--c-accent) 62%, var(--c-text) 38%);
+    animation: chip-float 4.5s ease-in-out infinite;
+  }
+
+  .about__chip--left {
+    left: 1rem;
+    top: 1rem;
+    animation-delay: 0ms;
+  }
+
+  .about__chip--center {
+    left: 50%;
+    top: 0.9rem;
+    transform: translateX(-50%);
+    animation-delay: 500ms;
+  }
+
+  .about__chip--right {
+    right: 1rem;
+    top: 1.2rem;
+    animation-delay: 1000ms;
+  }
+
+  .about__header {
+    margin-top: 1.8rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .about__eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    color: var(--c-text-muted);
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    margin-bottom: 0.85rem;
+  }
+
+  .about__header h1 {
+    margin-bottom: 0.8rem;
+    max-width: 18ch;
+  }
+
+  .about__lead {
+    font-size: 1.03rem;
+    color: var(--c-text-muted);
+    max-width: 56ch;
+    line-height: 1.65;
+  }
+
+  .about__cards {
+    margin-top: 1.4rem;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.9rem;
+  }
+
+  .about-card {
+    padding: 1rem 1rem 0.95rem;
+    border-radius: 14px;
+    border: 1px solid var(--c-border);
+    background: linear-gradient(160deg, var(--surface-glass-a), var(--surface-glass-b));
+    box-shadow:
+      0 16px 30px -28px var(--c-shadow),
+      0 1px 0 var(--surface-highlight) inset;
+    transition: transform 0.3s var(--ease-out-expo), border-color 0.3s;
+  }
+
+  .about-card:hover {
+    transform: translateY(-4px);
+    border-color: color-mix(in srgb, var(--c-accent) 52%, var(--c-border) 48%);
+  }
+
+  .about-card h2 {
+    font-size: 1.25rem;
+    margin-bottom: 0.45rem;
+  }
+
+  .about-card p {
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: var(--c-text-muted);
+  }
+
+  .about__links {
+    margin-top: 1.2rem;
+    display: flex;
+    gap: 0.7rem;
+    flex-wrap: wrap;
+  }
+
+  .about__link {
+    padding: 0.46rem 0.9rem;
+    border-radius: 999px;
+    border: 1px solid var(--c-border);
+    background: linear-gradient(120deg, var(--surface-glass-a), var(--surface-glass-b));
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--c-accent) 65%, var(--c-text) 35%);
+    transition: transform 0.2s, border-color 0.2s;
+  }
+
+  .about__link:hover {
+    transform: translateX(2px);
+    border-color: color-mix(in srgb, var(--c-accent) 52%, var(--c-border) 48%);
+  }
+
+  @keyframes chip-float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-5px);
+    }
+  }
+
+  .about__chip--center {
+    animation-name: chip-float-center;
+  }
+
+  @keyframes chip-float-center {
+    0%,
+    100% {
+      transform: translateX(-50%) translateY(0);
+    }
+    50% {
+      transform: translateX(-50%) translateY(-5px);
+    }
+  }
+
+  @keyframes about-pan {
+    0% {
+      object-position: 50% 34%;
+    }
+
+    100% {
+      object-position: 50% 66%;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .about__cards {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .about__visual {
+      min-height: 170px;
+      border-radius: 15px;
+    }
+
+    .about__chip {
+      font-size: 0.58rem;
+      letter-spacing: 0.06em;
+    }
+
+    .about__chip--center {
+      top: 0.72rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .about__visual-img,
+    .about__chip {
+      animation: none;
+    }
+  }
+</style>

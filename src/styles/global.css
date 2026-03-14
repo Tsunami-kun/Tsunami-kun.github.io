@@ -1,0 +1,419 @@
+@font-face {
+  font-family: 'HuaiSuCalligraphy';
+  src: url('/fonts/huai-su-calligraphy.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+/* ─── Reset ─── */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ─── Custom Properties (Cyber-Poetic) ─── */
+:root {
+  --c-bg: #e9e3db;
+  --c-bg-deep: #d6dee6;
+  --c-surface: rgba(247, 242, 235, 0.72);
+  --c-surface-strong: rgba(250, 246, 240, 0.88);
+  --c-border: rgba(49, 42, 36, 0.14);
+  --c-text: #241e1a;
+  --c-text-muted: #625b55;
+  --c-accent: #809eb4;
+  --c-accent-2: #b77967;
+  --c-accent-dim: rgba(128, 158, 180, 0.14);
+  --c-glow: rgba(128, 158, 180, 0.22);
+  --c-shadow: rgba(31, 26, 22, 0.16);
+
+  --bg-top: rgba(248, 243, 236, 0.84);
+  --bg-orb-1: rgba(183, 121, 103, 0.16);
+  --bg-orb-2: rgba(128, 158, 180, 0.16);
+  --bg-orb-3: rgba(110, 124, 140, 0.1);
+  --mist-a: rgba(128, 158, 180, 0.18);
+  --mist-b: rgba(183, 121, 103, 0.16);
+  --page-art-main: url('/art/reference-day.jpg');
+  --page-art-secondary: none;
+
+  --surface-glass-a: rgba(249, 244, 238, 0.86);
+  --surface-glass-b: rgba(246, 240, 233, 0.58);
+  --surface-veil: rgba(249, 244, 238, 0.42);
+  --surface-highlight: rgba(255, 255, 255, 0.74);
+  --nav-bg-a: rgba(248, 243, 236, 0.8);
+  --nav-bg-b: rgba(243, 237, 231, 0.62);
+  --chip-dark-bg: rgba(31, 26, 22, 0.72);
+  --chip-dark-text: #f8f0e8;
+  --line-soft: rgba(49, 42, 36, 0.08);
+
+  --font-sans: 'Inter', 'SF Pro Display', 'Segoe UI', sans-serif;
+  --font-display: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+  --font-mono: 'IBM Plex Mono', 'JetBrains Mono', 'Fira Code', monospace;
+  --font-calligraphy: 'HuaiSuCalligraphy', 'AR PL UKai TW', 'AR PL UKai CN', 'KaiTi', 'STKaiti', serif;
+
+  --grid-gap: 1.5rem;
+  --page-pad: clamp(1.5rem, 5vw, 4rem);
+  --max-w: 1200px;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration: 0.6s;
+  --theme-switch-ms: 300ms;
+  --theme-switch-ease: cubic-bezier(0.25, 1, 0.35, 1);
+}
+
+:root[data-theme='night'] {
+  --c-bg: #11171f;
+  --c-bg-deep: #1a2330;
+  --c-surface: rgba(22, 27, 34, 0.68);
+  --c-surface-strong: rgba(24, 30, 39, 0.84);
+  --c-border: rgba(219, 203, 186, 0.18);
+  --c-text: #f0e8df;
+  --c-text-muted: #b9aea2;
+  --c-accent: #a1bdd1;
+  --c-accent-2: #d59a84;
+  --c-accent-dim: rgba(161, 189, 209, 0.18);
+  --c-glow: rgba(161, 189, 209, 0.24);
+  --c-shadow: rgba(0, 0, 0, 0.58);
+
+  --bg-top: rgba(17, 23, 31, 0.84);
+  --bg-orb-1: rgba(213, 154, 132, 0.12);
+  --bg-orb-2: rgba(161, 189, 209, 0.14);
+  --bg-orb-3: rgba(98, 117, 140, 0.12);
+  --mist-a: rgba(161, 189, 209, 0.14);
+  --mist-b: rgba(213, 154, 132, 0.14);
+  --page-art-main: url('/art/reference-night.jpg');
+  --page-art-secondary: none;
+
+  --surface-glass-a: rgba(20, 24, 31, 0.82);
+  --surface-glass-b: rgba(17, 21, 28, 0.58);
+  --surface-veil: rgba(18, 22, 29, 0.42);
+  --surface-highlight: rgba(255, 245, 234, 0.16);
+  --nav-bg-a: rgba(16, 20, 27, 0.84);
+  --nav-bg-b: rgba(14, 18, 24, 0.68);
+  --chip-dark-bg: rgba(12, 15, 20, 0.8);
+  --chip-dark-text: #f0e8df;
+  --line-soft: rgba(219, 203, 186, 0.12);
+}
+
+/* ─── Base ─── */
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scrollbar-color: color-mix(in srgb, var(--c-accent) 50%, transparent) transparent;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--c-text);
+  line-height: 1.6;
+  min-height: 100dvh;
+  background:
+    linear-gradient(180deg, var(--bg-top) 0%, color-mix(in srgb, var(--c-bg) 78%, transparent) 46%, color-mix(in srgb, var(--c-bg-deep) 88%, transparent) 100%);
+  transition:
+    background var(--theme-switch-ms) var(--theme-switch-ease),
+    color var(--theme-switch-ms) ease;
+}
+
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+body::before {
+  z-index: -2;
+  opacity: 0.42;
+  background-image:
+    linear-gradient(180deg, rgba(255, 248, 240, 0.16), rgba(15, 18, 24, 0.14)),
+    var(--page-art-main),
+    var(--page-art-secondary);
+  background-size:
+    cover,
+    cover,
+    min(56rem, 78vw) auto;
+  background-position:
+    center,
+    center top,
+    10% 82%;
+  background-repeat: no-repeat;
+  background-blend-mode: normal, soft-light, screen;
+  filter: saturate(0.88) contrast(1.02);
+  transform: scale(1.02);
+}
+
+body::after {
+  z-index: -1;
+  filter: blur(48px);
+  opacity: 0.7;
+  background:
+    radial-gradient(circle at 18% 24%, rgba(255, 250, 242, 0.12) 0 0.22rem, transparent 0.24rem),
+    radial-gradient(circle at 74% 62%, rgba(255, 250, 242, 0.12) 0 0.2rem, transparent 0.23rem),
+    linear-gradient(112deg, transparent 0 48.8%, rgba(132, 42, 38, 0.22) 49.2%, rgba(132, 42, 38, 0.22) 50.3%, transparent 50.7%),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.03) 0 1px, transparent 1px 9rem),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.024) 0 1px, transparent 1px 8rem),
+    radial-gradient(circle at 78% 12%, var(--mist-a), transparent 33%),
+    radial-gradient(circle at 22% 68%, var(--mist-b), transparent 36%),
+    linear-gradient(180deg, rgba(255, 252, 248, 0.08), rgba(12, 16, 22, 0.08));
+  transition:
+    background var(--theme-switch-ms) var(--theme-switch-ease),
+    opacity var(--theme-switch-ms) ease;
+}
+
+main {
+  position: relative;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.25s ease;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--c-accent) 24%, white 12%);
+  color: var(--c-text);
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* ─── Typography ─── */
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: clamp(2.7rem, 7vw, 5rem);
+}
+
+h2 {
+  font-size: clamp(2rem, 4.3vw, 3rem);
+}
+
+h3 {
+  font-size: clamp(1.2rem, 2.2vw, 1.5rem);
+}
+
+p {
+  max-width: 65ch;
+}
+
+/* ─── Layout Utilities ─── */
+.container {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 var(--page-pad);
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--grid-gap);
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--grid-gap);
+}
+
+@media (max-width: 768px) {
+  .grid-2,
+  .grid-3 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ─── View Transitions ─── */
+::view-transition-old(root) {
+  animation: fade-out var(--duration) var(--ease-out-expo);
+}
+
+::view-transition-new(root) {
+  animation: fade-in var(--duration) var(--ease-out-expo);
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ─── Scrollbar ─── */
+::-webkit-scrollbar {
+  width: 9px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(0, 182, 255, 0.38), rgba(255, 95, 134, 0.36));
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+/* ─── Prose ─── */
+.prose {
+  max-width: 72ch;
+  line-height: 1.82;
+}
+
+.prose h2 {
+  margin-top: 2.8rem;
+  margin-bottom: 0.9rem;
+}
+
+.prose h3 {
+  margin-top: 2rem;
+  margin-bottom: 0.7rem;
+}
+
+.prose p {
+  margin-bottom: 1.15rem;
+  color: var(--c-text-muted);
+}
+
+.prose p:first-of-type {
+  color: var(--c-text);
+  font-size: 1.05rem;
+}
+
+.prose a {
+  color: color-mix(in srgb, var(--c-accent) 75%, var(--c-text) 25%);
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+}
+
+.prose a:hover {
+  color: var(--c-accent-2);
+}
+
+.prose ul,
+.prose ol {
+  margin-bottom: 1.25rem;
+  padding-left: 1.4rem;
+}
+
+.prose li {
+  margin-bottom: 0.45rem;
+  color: var(--c-text-muted);
+}
+
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: rgba(0, 182, 255, 0.1);
+  padding: 0.15em 0.42em;
+  border-radius: 5px;
+}
+
+.prose pre {
+  background: color-mix(in srgb, var(--c-surface-strong) 72%, transparent);
+  border: 1px solid var(--c-border);
+  border-radius: 12px;
+  padding: 1.25rem;
+  overflow-x: auto;
+  margin-bottom: 1.5rem;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--surface-highlight) 75%, transparent);
+}
+
+.prose pre code {
+  background: none;
+  padding: 0;
+}
+
+.prose blockquote {
+  border-left: 3px solid color-mix(in srgb, var(--c-accent) 70%, white 30%);
+  padding-left: 1.25rem;
+  margin-bottom: 1.25rem;
+  color: var(--c-text);
+  font-style: italic;
+}
+
+.prose img {
+  border-radius: 12px;
+  margin: 2rem 0;
+  border: 1px solid var(--c-border);
+}
+
+/* ─── Language Toggle (i18n) ─── */
+[data-lang-en] { display: inline; }
+[data-lang-zh] { display: none; }
+[data-lang-ja] { display: none; }
+:root[data-lang='zh'] [data-lang-en] { display: none; }
+:root[data-lang='zh'] [data-lang-zh] { display: inline; }
+:root[data-lang='ja'] [data-lang-en] { display: none; }
+:root[data-lang='ja'] [data-lang-ja] { display: inline; }
+
+/* Block-level trilingual elements */
+[data-lang-en-block] { display: block; }
+[data-lang-zh-block] { display: none; }
+[data-lang-ja-block] { display: none; }
+:root[data-lang='zh'] [data-lang-en-block] { display: none; }
+:root[data-lang='zh'] [data-lang-zh-block] { display: block; }
+:root[data-lang='ja'] [data-lang-en-block] { display: none; }
+:root[data-lang='ja'] [data-lang-ja-block] { display: block; }
+
+/* Flex-level trilingual elements */
+[data-lang-en-flex] { display: flex; }
+[data-lang-zh-flex] { display: none; }
+[data-lang-ja-flex] { display: none; }
+:root[data-lang='zh'] [data-lang-en-flex] { display: none; }
+:root[data-lang='zh'] [data-lang-zh-flex] { display: flex; }
+:root[data-lang='ja'] [data-lang-en-flex] { display: none; }
+:root[data-lang='ja'] [data-lang-ja-flex] { display: flex; }
+
+/* Inline-flex trilingual elements */
+[data-lang-en-iflex] { display: inline-flex; }
+[data-lang-zh-iflex] { display: none; }
+[data-lang-ja-iflex] { display: none; }
+:root[data-lang='zh'] [data-lang-en-iflex] { display: none; }
+:root[data-lang='zh'] [data-lang-zh-iflex] { display: inline-flex; }
+:root[data-lang='ja'] [data-lang-en-iflex] { display: none; }
+:root[data-lang='ja'] [data-lang-ja-iflex] { display: inline-flex; }
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --theme-switch-ms: 1ms;
+  }
+
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

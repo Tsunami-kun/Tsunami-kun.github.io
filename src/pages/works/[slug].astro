@@ -1,0 +1,432 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+import { withBase } from '@/lib/withBase';
+
+export async function getStaticPaths() {
+  const visibleWorkIds = new Set(['bimangrasp', 'synpoldex']);
+  const works = (await getCollection('works')).filter((work) => visibleWorkIds.has(work.id));
+  return works.map((work) => ({
+    params: { slug: work.id },
+    props: { work },
+  }));
+}
+
+const { work } = Astro.props;
+const { Content } = await render(work);
+const { title, description, thumbnail, category, year, metrics = [], links = [] } = work.data;
+---
+
+<BaseLayout title={`${title} — Yanming Shao`} description={description}>
+  <article class="case-file container">
+    <section class="case-file__hero" data-reveal>
+      <span class="case-marker" aria-hidden="true">03</span>
+
+      <div class="case-file__board">
+        <div class="case-file__photo-sheet">
+          <span class="case-file__pin" aria-hidden="true"></span>
+          <img
+            src={withBase(thumbnail)}
+            alt={title}
+            class="case-file__img"
+            transition:name={`work-thumb-${work.id}`}
+          />
+          <div class="case-file__photo-meta">
+            <span class="case-file__tag">{category}</span>
+            <span class="case-file__year">{year}</span>
+          </div>
+        </div>
+
+        <header class="case-file__summary">
+          <span class="case-file__label">
+            <span data-lang-en>Case File</span>
+            <span data-lang-zh>卷宗</span>
+            <span data-lang-ja>ファイル</span>
+          </span>
+          <h1 class="case-file__title" transition:name={`work-title-${work.id}`}>{title}</h1>
+          <p class="case-file__desc">{description}</p>
+
+          {links.length > 0 && (
+            <div class="case-file__links">
+              {links.map((l: { label: string; url: string }) => (
+                <a href={l.url} target="_blank" rel="noopener noreferrer" class="case-file__link">
+                  {l.label}
+                </a>
+              ))}
+            </div>
+          )}
+        </header>
+      </div>
+    </section>
+
+    {metrics.length > 0 && (
+      <section class="case-file__metrics" data-reveal>
+        {metrics.map((m: { label: string; value: string; progress?: number }) => (
+          <div class="case-metric">
+            <span class="case-metric__label">{m.label}</span>
+            <span class="case-metric__value">{m.value}</span>
+            {m.progress !== undefined && (
+              <div class="case-metric__bar-track">
+                <div class="case-metric__bar-fill" style={`--bar-w: ${m.progress}%`} />
+              </div>
+            )}
+          </div>
+        ))}
+      </section>
+    )}
+
+    <section class="case-file__content" data-reveal>
+      <div class="case-file__sheet">
+        <span class="case-file__sheet-label">
+          <span data-lang-en>Notes</span>
+          <span data-lang-zh>正文</span>
+          <span data-lang-ja>本文</span>
+        </span>
+        <div class="prose">
+          <Content />
+        </div>
+      </div>
+    </section>
+
+    <a href={withBase('/works')} class="case-file__back">
+      &larr;
+      <span data-lang-en>All Works</span>
+      <span data-lang-zh>全部作品</span>
+      <span data-lang-ja>すべての作品</span>
+    </a>
+  </article>
+</BaseLayout>
+
+<style>
+  .case-file {
+    padding-top: clamp(3rem, 8vh, 5.2rem);
+    padding-bottom: 3rem;
+  }
+
+  .case-file__hero {
+    position: relative;
+  }
+
+  .case-marker {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.4rem;
+    height: 3rem;
+    padding: 0 0.5rem;
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    color: #efe4d8;
+    background:
+      linear-gradient(180deg, rgba(122, 67, 42, 0.96), rgba(80, 41, 29, 0.96));
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow:
+      0 12px 20px -14px rgba(0, 0, 0, 0.75),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+
+  .case-marker::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 -0.75rem;
+    margin: 0 auto;
+    width: 0;
+    height: 0;
+    border-left: 0.8rem solid transparent;
+    border-right: 0.8rem solid transparent;
+    border-top: 0.8rem solid rgba(80, 41, 29, 0.96);
+  }
+
+  .case-file__board {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1.04fr) minmax(0, 0.92fr);
+    gap: 1.3rem;
+    padding: clamp(1rem, 2vw, 1.45rem);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background:
+      linear-gradient(180deg, rgba(18, 18, 20, 0.84), rgba(24, 25, 29, 0.92));
+    box-shadow: 0 34px 60px -46px rgba(0, 0, 0, 0.75);
+    overflow: hidden;
+  }
+
+  .case-file__board::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent),
+      url('/art/6vcr_3.png') center / cover no-repeat;
+    opacity: 0.1;
+    mix-blend-mode: screen;
+  }
+
+  .case-file__photo-sheet,
+  .case-file__summary,
+  .case-file__sheet {
+    position: relative;
+    z-index: 1;
+    background:
+      linear-gradient(180deg, rgba(244, 239, 230, 0.97), rgba(228, 220, 207, 0.95));
+    border: 1px solid rgba(92, 80, 66, 0.28);
+    box-shadow:
+      0 22px 34px -30px rgba(0, 0, 0, 0.65),
+      0 1px 0 rgba(255, 255, 255, 0.4) inset;
+  }
+
+  .case-file__photo-sheet {
+    padding: 0.7rem;
+    transform: rotate(-1deg);
+  }
+
+  .case-file__summary {
+    padding: 1.4rem 1.35rem 1.25rem;
+    align-self: center;
+    transform: rotate(1deg);
+  }
+
+  .case-file__pin {
+    position: absolute;
+    top: 0.45rem;
+    left: 50%;
+    width: 0.82rem;
+    height: 0.82rem;
+    margin-left: -0.41rem;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #d5cdc4, #6b6055 62%, #2a211c 100%);
+    box-shadow:
+      0 2px 4px rgba(0, 0, 0, 0.45),
+      0 0 0 1px rgba(255, 255, 255, 0.14) inset;
+    z-index: 2;
+  }
+
+  .case-file__img {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    object-position: 50% 38%;
+    border: 1px solid rgba(95, 84, 71, 0.32);
+    filter: saturate(0.84) contrast(1.04);
+    animation: case-pan 22s ease-in-out infinite alternate;
+  }
+
+  .case-file__photo-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.8rem;
+    padding: 0.8rem 0.2rem 0.1rem;
+  }
+
+  .case-file__tag,
+  .case-file__label,
+  .case-file__sheet-label {
+    display: inline-flex;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .case-file__tag {
+    color: #131313;
+    background: rgba(249, 246, 238, 0.94);
+    padding: 0.24rem 0.56rem;
+    border: 1px solid rgba(100, 90, 78, 0.22);
+  }
+
+  .case-file__year {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.4rem;
+    height: 2.4rem;
+    font-size: 0.76rem;
+    font-family: var(--font-mono);
+    color: #f4ece2;
+    background: rgba(28, 24, 22, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .case-file__label,
+  .case-file__sheet-label {
+    margin-bottom: 0.8rem;
+    color: #7f302d;
+  }
+
+  .case-file__title {
+    margin-bottom: 0.8rem;
+    color: #221b16;
+  }
+
+  .case-file__desc {
+    font-size: 1.02rem;
+    line-height: 1.8;
+    color: #5c534a;
+  }
+
+  .case-file__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.1rem;
+  }
+
+  .case-file__link {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #171717;
+    background: rgba(249, 246, 238, 0.94);
+    padding: 0.32rem 0.68rem;
+    border: 1px solid rgba(105, 93, 78, 0.2);
+  }
+
+  .case-file__link:hover {
+    border-color: rgba(128, 48, 43, 0.28);
+    background: rgba(251, 246, 239, 0.96);
+  }
+
+  .case-file__metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-top: 1.4rem;
+  }
+
+  .case-metric {
+    padding: 1rem 1.05rem 0.95rem;
+    background:
+      linear-gradient(180deg, rgba(244, 239, 230, 0.97), rgba(228, 220, 207, 0.95));
+    border: 1px solid rgba(92, 80, 66, 0.28);
+    box-shadow:
+      0 18px 28px -30px rgba(0, 0, 0, 0.6),
+      0 1px 0 rgba(255, 255, 255, 0.38) inset;
+  }
+
+  .case-metric__label {
+    display: inline-flex;
+    margin-bottom: 0.35rem;
+    font-size: 0.7rem;
+    font-family: var(--font-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #685d54;
+  }
+
+  .case-metric__value {
+    display: block;
+    margin-bottom: 0.45rem;
+    font-family: var(--font-mono);
+    font-size: 1.35rem;
+    color: #7e2f2d;
+  }
+
+  .case-metric__bar-track {
+    height: 4px;
+    background: rgba(35, 29, 24, 0.12);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .case-metric__bar-fill {
+    height: 100%;
+    width: var(--bar-w);
+    border-radius: 2px;
+    background: linear-gradient(90deg, #7f302d 0%, #b76b50 100%);
+    animation: bar-grow 1.2s var(--ease-out-expo) forwards;
+    box-shadow: 0 0 10px rgba(127, 48, 45, 0.2);
+  }
+
+  @keyframes bar-grow {
+    from { width: 0; }
+    to { width: var(--bar-w); }
+  }
+
+  .case-file__content {
+    margin-top: 1.5rem;
+  }
+
+  .case-file__sheet {
+    padding: 1.5rem clamp(1rem, 3vw, 2rem) 1.8rem;
+  }
+
+  .case-file :global(.prose p),
+  .case-file :global(.prose li) {
+    color: #5c534a;
+  }
+
+  .case-file :global(.prose p:first-of-type) {
+    color: #241d18;
+  }
+
+  .case-file__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #efe4d8;
+    background: rgba(15, 16, 18, 0.72);
+    padding: 0.35rem 0.7rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .case-file__back:hover {
+    color: #fff8ef;
+  }
+
+  @media (max-width: 860px) {
+    .case-file__board {
+      grid-template-columns: 1fr;
+    }
+
+    .case-file__photo-sheet,
+    .case-file__summary {
+      transform: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .case-file {
+      padding-top: 2.4rem;
+    }
+
+    .case-marker {
+      top: 0.7rem;
+      left: 0.7rem;
+    }
+
+    .case-file__board {
+      padding: 0.9rem;
+    }
+
+    .case-file__sheet {
+      padding: 1.2rem 0.95rem 1.4rem;
+    }
+  }
+
+  @keyframes case-pan {
+    0% {
+      object-position: 50% 32%;
+    }
+
+    100% {
+      object-position: 50% 68%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .case-file__img {
+      animation: none;
+    }
+  }
+</style>

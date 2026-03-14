@@ -1,0 +1,202 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+import { withBase } from '@/lib/withBase';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const { title, date, tags = [] } = post.data;
+
+const formatted = new Date(date).toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<BaseLayout title={`${title} — Yanming Shao`}>
+  <!-- Reading progress bar -->
+  <div class="progress-bar" id="progress-bar" aria-hidden="true">
+    <div class="progress-bar__fill" id="progress-fill"></div>
+  </div>
+
+  <article class="post container" id="article">
+    <header class="post__header">
+      <span class="post__date">{formatted}</span>
+      <h1 class="post__title">{title}</h1>
+      {tags.length > 0 && (
+        <div class="post__tags">
+          {tags.map((tag: string) => (
+            <span class="post__tag">{tag}</span>
+          ))}
+        </div>
+      )}
+    </header>
+    <div class="prose">
+      <Content />
+    </div>
+
+    <!-- End marker -->
+    <div class="post__end">
+      <span class="post__end-line"></span>
+      <span class="post__end-label"><span data-lang-en>End</span><span data-lang-zh>终</span><span data-lang-ja>了</span></span>
+      <span class="post__end-line"></span>
+    </div>
+
+    <a href={withBase('/travelogue')} class="post__back">&larr; <span data-lang-en>Travelogue</span><span data-lang-zh>游记</span><span data-lang-ja>旅行記</span></a>
+  </article>
+
+  <script is:inline>
+    function initProgress() {
+      const fill = document.getElementById('progress-fill');
+      const article = document.getElementById('article');
+      if (!fill || !article) return;
+
+      let ticking = false;
+
+      function updateProgress() {
+        const rect = article.getBoundingClientRect();
+        const articleTop = rect.top + window.scrollY;
+        const articleHeight = rect.height;
+        const viewportHeight = window.innerHeight;
+
+        const scrolled = window.scrollY - articleTop;
+        const total = articleHeight - viewportHeight;
+
+        let progress = 0;
+        if (total > 0) {
+          progress = Math.min(Math.max(scrolled / total, 0), 1);
+        }
+
+        fill.style.transform = `scaleX(${progress})`;
+        ticking = false;
+      }
+
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          requestAnimationFrame(updateProgress);
+          ticking = true;
+        }
+      }, { passive: true });
+
+      updateProgress();
+    }
+
+    // Support Astro view transitions
+    document.addEventListener('astro:page-load', initProgress);
+  </script>
+</BaseLayout>
+
+<style>
+  /* ─── Progress Bar ─── */
+  .progress-bar {
+    position: fixed;
+    top: 3.75rem;
+    left: 0;
+    right: 0;
+    height: 3px;
+    z-index: 99;
+    background: rgba(18, 44, 86, 0.1);
+  }
+
+  .progress-bar__fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--c-accent), var(--c-accent-2));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.1s linear;
+    will-change: transform;
+    box-shadow: 0 0 14px rgba(0, 182, 255, 0.4);
+  }
+
+  /* ─── Post Layout ─── */
+  .post {
+    padding-top: clamp(3.2rem, 8vh, 6.2rem);
+  }
+
+  .post__header {
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--c-border);
+    position: relative;
+  }
+
+  .post__date {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--c-text-muted);
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  .post__title {
+    margin-bottom: 1rem;
+    max-width: 18ch;
+  }
+
+  .post__tags {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .post__tag {
+    font-size: 0.7rem;
+    font-family: var(--font-mono);
+    color: var(--c-text-muted);
+    background: linear-gradient(120deg, rgba(0, 182, 255, 0.12), rgba(255, 95, 134, 0.1));
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    border: 1px solid var(--c-border);
+  }
+
+  /* ─── End Marker ─── */
+  .post__end {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    color: var(--c-text-muted);
+  }
+
+  .post__end-line {
+    flex: 1;
+    height: 1px;
+    background: var(--c-border);
+  }
+
+  .post__end-label {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .post__back {
+    display: inline-block;
+    margin-top: 2rem;
+    font-size: 0.85rem;
+    color: var(--c-text-muted);
+    transition: color 0.2s, transform 0.2s;
+  }
+
+  .post__back:hover {
+    color: color-mix(in srgb, var(--c-accent) 72%, var(--c-text) 28%);
+    transform: translateX(-2px);
+  }
+
+  @media (max-width: 640px) {
+    .progress-bar {
+      top: 6.2rem;
+    }
+  }
+</style>

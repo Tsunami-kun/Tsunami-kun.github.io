@@ -1,0 +1,170 @@
+<div class="site-progress" aria-hidden="true">
+  <span class="site-progress__bar" data-site-progress></span>
+</div>
+
+<script is:inline>
+  (() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const hasFinePointer = () => window.matchMedia('(pointer: fine)').matches;
+
+    function updateScrollProgress() {
+      const bar = document.querySelector('[data-site-progress]');
+      if (!bar) return;
+
+      const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = scrollable > 0 ? Math.min(Math.max(window.scrollY / scrollable, 0), 1) : 0;
+      bar.style.transform = `scaleX(${progress})`;
+    }
+
+    function bindRevealObserver() {
+      const revealTargets = document.querySelectorAll('[data-reveal]');
+      if (!revealTargets.length) return;
+
+      window.__opendexRevealObserver?.disconnect();
+
+      if (prefersReducedMotion.matches) {
+        revealTargets.forEach((element) => element.classList.add('is-revealed'));
+        return;
+      }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add('is-revealed');
+            observer.unobserve(entry.target);
+          });
+        },
+        { threshold: 0.18, rootMargin: '0px 0px -8% 0px' }
+      );
+
+      revealTargets.forEach((element) => observer.observe(element));
+      window.__opendexRevealObserver = observer;
+    }
+
+    function bindTiltCards() {
+      if (prefersReducedMotion.matches || !hasFinePointer()) return;
+
+      document.querySelectorAll('[data-tilt]').forEach((element) => {
+        if (element.dataset.tiltReady === 'true') return;
+        element.dataset.tiltReady = 'true';
+
+        const limit = Number(element.dataset.tiltLimit || '8');
+
+        element.addEventListener('pointermove', (event) => {
+          const rect = element.getBoundingClientRect();
+          const px = (event.clientX - rect.left) / rect.width - 0.5;
+          const py = (event.clientY - rect.top) / rect.height - 0.5;
+          element.style.setProperty('--tilt-x', `${(-py * limit).toFixed(2)}deg`);
+          element.style.setProperty('--tilt-y', `${(px * limit).toFixed(2)}deg`);
+        });
+
+        element.addEventListener('pointerleave', () => {
+          element.style.setProperty('--tilt-x', '0deg');
+          element.style.setProperty('--tilt-y', '0deg');
+        });
+      });
+    }
+
+    function initOnce() {
+      if (window.__opendexChromeBound !== true) {
+        window.addEventListener('scroll', updateScrollProgress, { passive: true });
+        window.addEventListener('resize', updateScrollProgress, { passive: true });
+        window.__opendexChromeBound = true;
+      }
+    }
+
+    function initPage() {
+      updateScrollProgress();
+      bindRevealObserver();
+      bindTiltCards();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener(
+        'DOMContentLoaded',
+        () => {
+          initOnce();
+          initPage();
+        },
+        { once: true }
+      );
+    } else {
+      initOnce();
+      initPage();
+    }
+
+    document.addEventListener('astro:page-load', () => {
+      initOnce();
+      initPage();
+    });
+  })();
+</script>
+
+<style>
+  .site-progress {
+    position: fixed;
+    inset: 0 0 auto;
+    height: 3px;
+    z-index: 140;
+    pointer-events: none;
+  }
+
+  .site-progress__bar {
+    display: block;
+    width: 100%;
+    height: 100%;
+    transform: scaleX(0);
+    transform-origin: left center;
+    background: linear-gradient(90deg, var(--c-accent), var(--c-accent-2));
+    box-shadow: 0 0 18px color-mix(in srgb, var(--c-accent) 60%, transparent);
+  }
+
+  :global(body > nav),
+  :global(body > main),
+  :global(body > footer),
+  :global(body > [data-music-player]) {
+    position: relative;
+    z-index: 1;
+  }
+
+  :global([data-reveal]) {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+      opacity 0.75s var(--ease-out-expo),
+      transform 0.75s var(--ease-out-expo);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  :global([data-reveal].is-revealed) {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  :global([data-tilt]) {
+    transform-style: preserve-3d;
+    transform:
+      perspective(1200px)
+      rotateX(var(--tilt-x, 0deg))
+      rotateY(var(--tilt-y, 0deg));
+    transition:
+      transform 0.35s var(--ease-out-expo),
+      box-shadow 0.35s ease,
+      border-color 0.35s ease;
+    will-change: transform;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global([data-reveal]) {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+
+    :global([data-tilt]) {
+      transform: none;
+      transition: none;
+    }
+  }
+</style>

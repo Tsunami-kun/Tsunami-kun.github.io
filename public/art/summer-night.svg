@@ -1,0 +1,59 @@
+<svg width="1600" height="920" viewBox="0 0 1600 920" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="skyNight" x1="800" y1="32" x2="800" y2="560" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0D1F45"/>
+      <stop offset="0.55" stop-color="#1C2F63"/>
+      <stop offset="1" stop-color="#344A84"/>
+    </linearGradient>
+    <linearGradient id="seaNight" x1="800" y1="520" x2="800" y2="920" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#234A87"/>
+      <stop offset="0.52" stop-color="#17386B"/>
+      <stop offset="1" stop-color="#10254A"/>
+    </linearGradient>
+    <radialGradient id="moonHalo" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1264 164) rotate(90) scale(178)">
+      <stop offset="0" stop-color="#F5F2FF"/>
+      <stop offset="0.52" stop-color="#D7DEFF" stop-opacity="0.75"/>
+      <stop offset="1" stop-color="#D7DEFF" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="seaGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(864 584) rotate(88) scale(186 510)">
+      <stop offset="0" stop-color="#7CD5FF" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="#7CD5FF" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1600" height="920" fill="url(#skyNight)"/>
+  <circle cx="1264" cy="164" r="182" fill="url(#moonHalo)"/>
+  <circle cx="1264" cy="164" r="62" fill="#F4F4FF"/>
+  <circle cx="1246" cy="150" r="11" fill="#D9DBF9"/>
+  <circle cx="1288" cy="182" r="8" fill="#DEE2FF"/>
+
+  <g fill="#DDE7FF" opacity="0.88">
+    <circle cx="172" cy="116" r="2.4"/>
+    <circle cx="230" cy="168" r="1.8"/>
+    <circle cx="284" cy="100" r="2"/>
+    <circle cx="356" cy="144" r="1.7"/>
+    <circle cx="424" cy="118" r="2.1"/>
+    <circle cx="562" cy="172" r="2.3"/>
+    <circle cx="642" cy="94" r="1.9"/>
+    <circle cx="732" cy="138" r="1.7"/>
+    <circle cx="824" cy="108" r="2.5"/>
+    <circle cx="928" cy="148" r="1.8"/>
+    <circle cx="1022" cy="124" r="2.1"/>
+    <circle cx="1124" cy="92" r="1.9"/>
+    <circle cx="1360" cy="94" r="2.2"/>
+    <circle cx="1422" cy="146" r="2"/>
+    <circle cx="1496" cy="110" r="1.8"/>
+  </g>
+
+  <rect y="518" width="1600" height="402" fill="url(#seaNight)"/>
+  <ellipse cx="860" cy="596" rx="512" ry="196" fill="url(#seaGlow)"/>
+  <path d="M0 538C126 552 210 528 332 538C458 548 552 570 684 564C804 558 930 524 1060 536C1190 548 1312 574 1442 564C1520 558 1562 546 1600 540V614H0V538Z" fill="#A8D8FF" fill-opacity="0.22"/>
+  <path d="M0 612C136 604 236 630 362 634C488 638 588 604 710 608C838 612 950 640 1078 642C1204 644 1318 620 1442 622C1526 624 1570 632 1600 638V702H0V612Z" fill="#C8E6FF" fill-opacity="0.17"/>
+  <path d="M0 688C144 680 240 706 366 710C488 714 584 684 706 688C826 692 944 716 1068 720C1192 724 1314 702 1436 706C1526 708 1568 714 1600 718V780H0V688Z" fill="#DEF1FF" fill-opacity="0.11"/>
+
+  <g opacity="0.6" fill="#C7D6FF">
+    <path d="M520 364C536 350 564 344 582 354C598 344 626 344 642 356C618 358 598 372 590 386C582 372 550 360 520 364Z"/>
+    <path d="M698 324C714 308 742 302 760 314C776 304 804 304 818 316C794 316 772 332 764 346C754 332 724 318 698 324Z"/>
+    <path d="M1004 352C1020 338 1050 332 1070 344C1086 332 1116 332 1134 346C1106 348 1086 362 1078 378C1068 362 1034 350 1004 352Z"/>
+  </g>
+</svg>

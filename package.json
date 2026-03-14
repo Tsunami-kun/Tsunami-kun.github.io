@@ -1,0 +1,23 @@
+{
+  "name": "yanming-homepage",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "CHOKIDAR_USEPOLLING=true CHOKIDAR_INTERVAL=150 astro dev",
+    "dev:native": "astro dev",
+    "dev:stable": "CHOKIDAR_USEPOLLING=true CHOKIDAR_INTERVAL=150 astro dev",
+    "dev:host": "CHOKIDAR_USEPOLLING=true CHOKIDAR_INTERVAL=150 astro dev --host --port 4321",
+    "build": "astro build",
+    "preview": "astro preview",
+    "new:post": "node scripts/new-content.mjs post",
+    "new:work": "node scripts/new-content.mjs work",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^4.0.0",
+    "astro": "^5.2.0",
+    "rehype-katex": "^7.0.1",
+    "remark-math": "^6.0.0"
+  }
+}

@@ -1,0 +1,53 @@
+---
+title: "SynPolDex — Synergizing Fingers via Bi-Level Policy Learning"
+description: "A bi-level framework for finger coordination in multi-fingered robot hands, combining high-level finger-role planning with low-level control."
+thumbnail: "/thumbs/synpoldex-teaser.png"
+category: "Paper"
+year: 2025
+metrics:
+  - { label: "Toilet Success", value: "90%", progress: 90 }
+  - { label: "Faucet Success", value: "82%", progress: 82 }
+  - { label: "Hand Types", value: "3" }
+links:
+  - { label: "Humanoids 2025", url: "https://www.ieee-ras.org/conferences-workshops/financially-co-sponsored/humanoids" }
+---
+
+## Overview
+
+**SynPolDex** starts from a simple observation: dexterous manipulation is not just about moving joints well, but about assigning meaningful roles to different fingers. Some fingers lead; others stabilize, support, or stay clear. The project turns that intuition into a bi-level learning framework.
+
+## Method
+
+The method is split into two stages.
+
+At the high level, a vision-language model proposes a finger-role plan for the current task and hand embodiment. It decides which fingers should dominate the manipulation and which should play supporting roles.
+
+At the low level, reinforcement learning turns that plan into control. Two design choices matter here:
+
+- reward shaping that encourages the right fingers to contact the right object parts
+- advantage factorization that gives stronger learning signal to the joints that matter most for the chosen role assignment
+
+## Generalization
+
+We evaluate on three different robot hands: Allegro, Inspire, and Leap. This matters because finger coordination should not be tied to one embodiment. The same task can demand different role assignments when hand morphology changes.
+
+## Results
+
+Evaluated on the DexArt-m benchmark across four manipulation tasks:
+
+| Task | Hand | Success Rate |
+|------|------|-------------|
+| Toilet lid | Allegro | **90%** |
+| Faucet | Allegro | **82%** |
+| Faucet | Leap | **76%** |
+| Laptop lid | Allegro | **58%** |
+| Bucket | Allegro | **56%** |
+| Toilet lid | Inspire | **52%** |
+
+In human-likeness evaluation, SynPolDex scores more than **2x higher** than the PPO baseline, showing that better role assignment also produces more interpretable behavior.
+
+## Venue
+
+Accepted at **IEEE-RAS International Conference on Humanoid Robots (Humanoids) 2025**.
+
+**Authors:** Yanming Shao, Yan Ding*, Chenxi Xiao*

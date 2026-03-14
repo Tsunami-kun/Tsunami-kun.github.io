@@ -1,0 +1,45 @@
+---
+title: "BimanGrasp — Bimanual Grasp Synthesis for Dexterous Robot Hands"
+description: "Physics-verified bimanual grasp synthesis for dexterous hands, with a 150K-scale dataset built over 900 everyday objects."
+thumbnail: "/thumbs/bimangrasp-teaser.png"
+category: "Paper"
+year: 2024
+metrics:
+  - { label: "Verified Grasps", value: "150K+" }
+  - { label: "Daily Objects", value: "900" }
+  - { label: "DDPM Success", value: "69.87%", progress: 70 }
+links:
+  - { label: "Project Page", url: "https://BimanGrasp.github.io/" }
+  - { label: "IEEE RA-L", url: "https://ieeexplore.ieee.org" }
+---
+
+## Overview
+
+**BimanGrasp** studies a simple gap: many daily objects are naturally handled with two hands, but large-scale grasp synthesis has mostly focused on one hand. The project builds a physics-based pipeline for generating stable bimanual grasps on arbitrary 3D objects and releases the resulting dataset.
+
+## Method
+
+The core problem is posed as stochastic optimization over two dexterous hands. A composite energy balances four requirements:
+
+- stable force closure
+- contact with the object surface
+- low penetration, including hand-object and inter-hand collision
+- kinematic feasibility under joint limits
+
+Each candidate grasp is initialized around the object and refined with Langevin-style optimization. Final poses are then checked in simulation rather than accepted by geometry alone.
+
+## Dataset and Results
+
+The resulting **BimanGrasp-Dataset** contains more than **150K** verified grasps on **900** everyday objects. Every grasp is validated in Isaac Gym under randomized gravity rotations, which keeps the dataset grounded in physical success instead of appearance alone.
+
+To speed up inference, we also train a diffusion model on the synthesized grasps. With light post-processing, it reaches **69.87%** success while remaining much faster than full optimization.
+
+## Why It Matters
+
+BimanGrasp provides a practical starting point for studying dexterous two-hand interaction at scale. It also shows that a large amount of useful structure can come from geometry and physics before imitation or language priors are introduced.
+
+## Venue
+
+Published in **IEEE Robotics and Automation Letters (RA-L)** and presented at **ICRA 2025**.
+
+**Authors:** Yanming Shao, Chenxi Xiao*

@@ -1,0 +1,92 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import Nav from '@/components/Nav.astro';
+import Footer from '@/components/Footer.astro';
+import MusicPlayer from '@/components/MusicPlayer.astro';
+import SiteChrome from '@/components/SiteChrome.astro';
+import '@/styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'Yanming Shao — Embodied AI, Art, and Music',
+  description = 'Personal site of Yanming Shao. Selected work on dexterous manipulation and embodied AI, with paintings, notes, and a long lake track.',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" data-lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5YCBER1ssBmSRIPIhBqKUh4FLaR/p68VhVn4C30OoU5ynfALsPKK" crossorigin="anonymous" />
+
+    <script is:inline>
+      (() => {
+        const THEME_KEY = 'opendex-theme';
+        const root = document.documentElement;
+        let theme = 'day';
+
+        try {
+          const saved = localStorage.getItem(THEME_KEY);
+          if (saved === 'day' || saved === 'night') {
+            theme = saved;
+          } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            theme = 'night';
+          }
+        } catch {
+          // Ignore storage failures and keep default theme.
+        }
+
+        root.dataset.theme = theme;
+      })();
+    </script>
+
+    <script is:inline>
+      (() => {
+        const LANG_KEY = 'opendex-lang';
+        const root = document.documentElement;
+        let lang = 'en';
+
+        try {
+          const saved = localStorage.getItem(LANG_KEY);
+          if (saved === 'en' || saved === 'zh' || saved === 'ja') {
+            lang = saved;
+          }
+        } catch {
+          // Ignore storage failures and keep default language.
+        }
+
+        root.dataset.lang = lang;
+        var langMap = { en: 'en', zh: 'zh-CN', ja: 'ja' };
+        root.setAttribute('lang', langMap[lang] || 'en');
+      })();
+    </script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Astro View Transitions (client-side routing + transitions) -->
+    <ClientRouter />
+  </head>
+  <body>
+    <SiteChrome />
+    <Nav />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+    <MusicPlayer />
+  </body>
+</html>
