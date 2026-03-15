@@ -10,33 +10,182 @@ metrics:
   - { label: "DDPM Success", value: "69.87%", progress: 70 }
 links:
   - { label: "Project Page", url: "https://BimanGrasp.github.io/" }
-  - { label: "IEEE RA-L", url: "https://ieeexplore.ieee.org" }
+  - { label: "arXiv", url: "https://arxiv.org/abs/2411.15903" }
+  - { label: "Dataset", url: "https://github.com/Tsunami-kun/BimanGrasp-Dataset" }
+  - { label: "Generation Code", url: "https://github.com/Tsunami-kun/BimanGrasp-Generation" }
 ---
 
-## Overview
+import { withBase } from '@/lib/withBase';
 
-**BimanGrasp** studies a simple gap: many daily objects are naturally handled with two hands, but large-scale grasp synthesis has mostly focused on one hand. The project builds a physics-based pipeline for generating stable bimanual grasps on arbitrary 3D objects and releases the resulting dataset.
+<div class="project-note">
+  <strong>BimanGrasp</strong> treats bimanual grasp synthesis as a physics-first problem. Instead of
+  guessing poses from appearance alone, it searches in the joint space of two dexterous hands, checks
+  penetration explicitly, and keeps only grasps that survive simulation.
+</div>
 
-## Method
+<figure class="project-figure project-figure--fit project-figure--breathe">
+  <img
+    src={withBase('/thumbs/bimangrasp-teaser.png')}
+    alt="BimanGrasp teaser with four example bimanual grasps."
+    loading="lazy"
+  />
+  <figcaption>
+    Large or torque-heavy objects often need two coordinated contacts; BimanGrasp targets exactly this
+    regime instead of reducing the problem to two independent single-hand grasps.
+  </figcaption>
+</figure>
 
-The core problem is posed as stochastic optimization over two dexterous hands. A composite energy balances four requirements:
+## Problem setting
 
-- stable force closure
-- contact with the object surface
-- low penetration, including hand-object and inter-hand collision
-- kinematic feasibility under joint limits
+Many daily objects are awkward for one hand but routine for two: basins, mugs with large handles, kitchen
+containers, light home appliances, and objects whose mass produces large torques. Existing dexterous grasp
+pipelines mostly optimize one hand at a time, which misses the coordination structure that makes these
+objects manageable.
 
-Each candidate grasp is initialized around the object and refined with Langevin-style optimization. Final poses are then checked in simulation rather than accepted by geometry alone.
+BimanGrasp addresses that gap with a three-stage pipeline:
 
-## Dataset and Results
+1. initialize two hands around the object with symmetric, human-like approach poses;
+2. optimize both hands jointly with an energy that mixes stability and feasibility;
+3. verify each candidate in Isaac Gym, then reuse the verified set to train a fast diffusion generator.
 
-The resulting **BimanGrasp-Dataset** contains more than **150K** verified grasps on **900** everyday objects. Every grasp is validated in Isaac Gym under randomized gravity rotations, which keeps the dataset grounded in physical success instead of appearance alone.
+The result is both an offline synthesis algorithm and a reusable dataset for learning-based generation.
 
-To speed up inference, we also train a diffusion model on the synthesized grasps. With light post-processing, it reaches **69.87%** success while remaining much faster than full optimization.
+## Optimization objective
 
-## Why It Matters
+The paper formulates grasp search as joint optimization over two hand poses and two hand configurations:
 
-BimanGrasp provides a practical starting point for studying dexterous two-hand interaction at scale. It also shows that a large amount of useful structure can come from geometry and physics before imitation or language priors are introduced.
+$$
+\min_{T_1, \theta_1, T_2, \theta_2}
+\; E
+=
+\lambda_{\mathrm{dis}} E_{\mathrm{dis}}
++ \lambda_{\mathrm{fc}} E_{\mathrm{fc}}
++ \lambda_{\mathrm{vew}} E_{\mathrm{vew}}
++ \lambda_{\mathrm{obj}} E_{\mathrm{objpen}}
++ \lambda_{\mathrm{self}} E_{\mathrm{selfpen}}
++ \lambda_{\mathrm{bim}} E_{\mathrm{bimpen}}
++ \lambda_{\mathrm{joint}} E_{\mathrm{joint}}.
+$$
+
+This decomposition is clean and useful:
+
+- $E_{\mathrm{dis}}$ pulls fingers and palms toward the object surface.
+- $E_{\mathrm{fc}}$ encourages force closure through contact geometry.
+- $E_{\mathrm{vew}}$ keeps the wrench matrix well-conditioned, so the grasp can resist disturbances from more than one direction.
+- $E_{\mathrm{objpen}}, E_{\mathrm{selfpen}}, E_{\mathrm{bimpen}}$ suppress hand-object, self, and inter-hand penetrations.
+- $E_{\mathrm{joint}}$ keeps all 44 finger joints inside valid limits.
+
+The optimizer is MALA rather than plain gradient descent. That detail matters here: the search space is
+high-dimensional, non-convex, and full of symmetric local minima.
+
+<div class="project-grid project-grid--2">
+  <figure class="project-figure project-figure--fit">
+    <img
+      src={withBase('/thumbs/bimangrasp-system.png')}
+      alt="BimanGrasp system figure showing optimization, verification, and DDPM generation."
+      loading="lazy"
+    />
+    <figcaption>
+      The full pipeline has a clear structure: optimize grasps, verify them, then amortize the result with a
+      diffusion model.
+    </figcaption>
+  </figure>
+
+  <figure class="project-figure project-figure--fit project-figure--breathe">
+    <img
+      src={withBase('/thumbs/bimangrasp-daily.png')}
+      alt="Examples of BimanGrasp grasps on daily objects."
+      loading="lazy"
+    />
+    <figcaption>
+      The synthesized grasps cover a wide range of containers and household geometries instead of a single
+      narrow object family.
+    </figcaption>
+  </figure>
+</div>
+
+## Verification and dataset
+
+The important design choice is that geometry alone is not accepted as evidence. Every candidate grasp is
+validated in Isaac Gym with a PD controller, fixed friction settings, randomized joint-object rotations, and
+ a success criterion tied to actual holding performance.
+
+A grasp enters the dataset only if:
+
+- the object stays in hand for 2.0 seconds of simulation time;
+- the verification rollout remains stable under changed gravity directions;
+- total penetration stays below the threshold used by the paper.
+
+That produces **BimanGrasp-Dataset**, a collection of more than **150K** verified grasps over **900** daily
+objects. The dataset is useful not just because it is large, but because the labels come from physical
+verification rather than visual plausibility.
+
+<figure class="project-figure project-figure--fit project-figure--zoom">
+  <img
+    src={withBase('/thumbs/bimangrasp-cv.png')}
+    alt="BimanGrasp qualitative results and dataset montage."
+    loading="lazy"
+  />
+  <figcaption>
+    The dataset spans qualitatively different contact modes: rim pinches, wrap grasps, support contacts,
+    opposing grasps, and object-specific asymmetric strategies.
+  </figcaption>
+</figure>
+
+## From optimization to fast generation
+
+Once the verified set exists, the paper turns grasp synthesis into a conditional diffusion problem:
+
+$$
+p_{\theta}(h^0 \mid O)
+=
+p(h^T) \prod_{t=1}^{T} p_{\theta}(h^{t-1} \mid h^t, O),
+$$
+
+where $O$ is an object feature extracted from geometry and $h^0$ is the target bimanual grasp. The
+learning objective is the standard noise-prediction DDPM loss:
+
+$$
+\mathcal{L}_{\theta}(h^0 \mid O)
+=
+\mathbb{E}_{t, \epsilon, h^0}
+\left[
+\left\|
+\epsilon -
+\epsilon_{\theta}\!\left(
+\sqrt{\alpha_t} h^0 + \sqrt{1 - \alpha_t}\,\epsilon,\;
+t,\;
+O
+\right)
+\right\|^2
+\right].
+$$
+
+The paper still applies a short post-optimization pass after generation, which is a pragmatic choice: the
+diffusion model is fast, while the optimizer remains the final tool for penetration cleanup.
+
+## Main results
+
+Two quantitative results matter most.
+
+| Setting | BimanGrasp | Baseline |
+| --- | ---: | ---: |
+| Object density $5000$ kg/m$^3$ | **41.02%** | 32.87% (`Uni2Bim (opt)`) |
+| Object density $2500$ kg/m$^3$ | **54.03%** | 45.26% (`Uni2Bim (opt)`) |
+| Object density $500$ kg/m$^3$ | **71.42%** | 56.69% (`Uni2Bim (opt)`) |
+| DDPM on unseen objects, $2500$ kg/m$^3$ | **54.06%** | comparable to optimization |
+| DDPM on unseen objects, $500$ kg/m$^3$ | **69.87%** | comparable to optimization |
+
+These numbers support a simple claim: bimanual coordination should be modeled jointly, and a physically
+verified synthesis pipeline can provide enough structure to train a fast generator without collapsing quality.
+
+## Why this work matters
+
+BimanGrasp is a good example of a useful research pattern for dexterous manipulation:
+
+- use geometry and mechanics to build a dataset before reaching for large learned policies;
+- separate generation from verification so success is testable;
+- keep the learning target close to a physically meaningful search procedure.
 
 ## Venue
 

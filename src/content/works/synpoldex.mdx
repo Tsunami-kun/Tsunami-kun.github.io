@@ -10,28 +10,107 @@ metrics:
   - { label: "Hand Types", value: "3" }
 links:
   - { label: "Humanoids 2025", url: "https://www.ieee-ras.org/conferences-workshops/financially-co-sponsored/humanoids" }
+  - { label: "DBLP", url: "https://dblp.org/rec/conf/humanoids/ShaoDX25.html" }
 ---
 
-## Overview
+import { withBase } from '@/lib/withBase';
 
-**SynPolDex** starts from a simple observation: dexterous manipulation is not just about moving joints well, but about assigning meaningful roles to different fingers. Some fingers lead; others stabilize, support, or stay clear. The project turns that intuition into a bi-level learning framework.
+<div class="project-note">
+  <strong>SynPolDex</strong> starts from a stricter question than generic dexterous RL: which fingers
+  should lead, which fingers should support, and how should that assignment change across tasks, objects,
+  and robot hands?
+</div>
 
-## Method
+<figure class="project-figure project-figure--fit project-figure--breathe">
+  <img
+    src={withBase('/thumbs/synpoldex-teaser.png')}
+    alt="SynPolDex teaser showing multi-task and multi-hand dexterous manipulation."
+    loading="lazy"
+  />
+  <figcaption>
+    The core idea is to split dexterity into two levels: a finger-use plan at the top, and a synergy-guided
+    control policy at the bottom.
+  </figcaption>
+</figure>
 
-The method is split into two stages.
+## Problem framing
 
-At the high level, a vision-language model proposes a finger-role plan for the current task and hand embodiment. It decides which fingers should dominate the manipulation and which should play supporting roles.
+Multi-finger manipulation often fails for two different reasons. First, the same task demands different
+coordination patterns under different hand embodiments: Allegro, Inspire, and Leap do not share the same
+kinematics or thumb geometry. Second, standard end-to-end RL tends to smear credit over every joint, even
+when only a subset of fingers should dominate the action.
 
-At the low level, reinforcement learning turns that plan into control. Two design choices matter here:
+SynPolDex responds by making finger roles explicit. The method asks the policy to decide not only how to
+move, but also how the fingers should divide labor.
 
-- reward shaping that encourages the right fingers to contact the right object parts
-- advantage factorization that gives stronger learning signal to the joints that matter most for the chosen role assignment
+## Bi-level policy
 
-## Generalization
+At the high level, a vision-language model reads the task scene and produces a finger-use plan:
 
-We evaluate on three different robot hands: Allegro, Inspire, and Leap. This matters because finger coordination should not be tied to one embodiment. The same task can demand different role assignments when hand morphology changes.
+$$
+S = \pi_{\mathrm{HL}}(Q_v, \tau, \eta),
+$$
 
-## Results
+where $Q_v$ denotes visual task cues, $\tau$ is task information, and $\eta$ summarizes hand-specific
+or synergy-related priors. The output plan $S = [s_1, s_2, \dots, s_M]$ specifies which fingers should
+lead, stabilize, or stay secondary.
+
+At the low level, the controller conditions on that plan:
+
+$$
+a_t \sim \pi_{\phi}(a_t \mid o_t, S).
+$$
+
+A compact way to summarize the low-level mechanism is:
+
+$$
+\tilde r_t = \sum_{k=1}^{K} s_k \, r_t^{(k)},
+\qquad
+\tilde A_t = P(S)\, A_t,
+$$
+
+so reward reshaping and advantage assignment concentrate gradient on the fingers that matter for the chosen
+role allocation. This is the clean part of the design: the high level tells the policy which fingers should be
+important, and the low level changes credit assignment accordingly.
+
+<div class="project-grid project-grid--2">
+  <figure class="project-figure project-figure--fit">
+    <img
+      src={withBase('/thumbs/synpoldex-system.png')}
+      alt="SynPolDex system figure with high-level planning and low-level policy learning."
+      loading="lazy"
+    />
+    <figcaption>
+      The pipeline is explicitly split into multi-turn finger planning and synergy-guided low-level policy
+      learning.
+    </figcaption>
+  </figure>
+
+  <figure class="project-figure project-figure--fit project-figure--zoom">
+    <img
+      src={withBase('/thumbs/synpoldex-cv.png')}
+      alt="SynPolDex qualitative examples on multiple objects and hands."
+      loading="lazy"
+    />
+    <figcaption>
+      The same principle transfers across containers, faucets, buckets, and bottles rather than only a single
+      benchmark object.
+    </figcaption>
+  </figure>
+</div>
+
+## Why the decomposition helps
+
+This bi-level split is useful for three separate reasons:
+
+- it gives a typed interface between language-level planning and continuous control;
+- it improves credit assignment by avoiding all-fingers-are-equal updates;
+- it makes cross-embodiment generalization easier, because the plan can adapt before the controller does.
+
+In other words, SynPolDex is not only a stronger policy. It is a cleaner way to say where symbolic structure
+ends and where motor learning begins.
+
+## Results and generalization
 
 Evaluated on the DexArt-m benchmark across four manipulation tasks:
 
@@ -44,7 +123,27 @@ Evaluated on the DexArt-m benchmark across four manipulation tasks:
 | Bucket | Allegro | **56%** |
 | Toilet lid | Inspire | **52%** |
 
-In human-likeness evaluation, SynPolDex scores more than **2x higher** than the PPO baseline, showing that better role assignment also produces more interpretable behavior.
+The broader result from the paper is that SynPolDex outperforms the PPO baseline by **26%** in task success
+and by **2.6x** in human-likeness evaluation. That second number matters: the method is not only completing
+tasks more often, but doing so with finger usage that is easier to interpret.
+
+<figure class="project-figure project-figure--fit project-figure--breathe">
+  <img
+    src={withBase('/thumbs/synpoldex-results.png')}
+    alt="SynPolDex result panels across different objects and embodiments."
+    loading="lazy"
+  />
+  <figcaption>
+    The result panel highlights two kinds of generalization: new object shapes and new poses within the same
+    task family.
+  </figcaption>
+</figure>
+
+## Takeaway
+
+The paper makes a narrow but important claim: dexterous manipulation improves when finger roles are treated
+as explicit latent structure rather than hidden side effects of PPO. That claim is modest enough to test,
+strong enough to transfer across hands, and concrete enough to be useful in future embodied-agent systems.
 
 ## Venue
 
