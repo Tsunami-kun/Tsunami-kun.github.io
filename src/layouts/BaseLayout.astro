@@ -9,16 +9,22 @@ import '@/styles/global.css';
 interface Props {
   title?: string;
   description?: string;
+  defaultLang?: 'en' | 'zh' | 'ja';
+  langStorageKey?: string;
 }
 
 const {
   title = 'Yanming Shao — Embodied AI, Art, and Music',
   description = 'Personal site of Yanming Shao. Selected work on dexterous manipulation and embodied AI, with paintings, notes, and a long lake track.',
+  defaultLang = 'en',
+  langStorageKey = 'opendex-lang',
 } = Astro.props;
+
+const initialLangAttr = defaultLang === 'zh' ? 'zh-CN' : defaultLang === 'ja' ? 'ja' : 'en';
 ---
 
 <!doctype html>
-<html lang="en" data-lang="en">
+<html lang={initialLangAttr} data-lang={defaultLang} data-lang-storage-key={langStorageKey}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -48,11 +54,11 @@ const {
       })();
     </script>
 
-    <script is:inline>
+    <script is:inline define:vars={{ defaultLang, langStorageKey }}>
       (() => {
-        const LANG_KEY = 'opendex-lang';
+        const LANG_KEY = langStorageKey || 'opendex-lang';
         const root = document.documentElement;
-        let lang = 'en';
+        let lang = defaultLang || 'en';
 
         try {
           const saved = localStorage.getItem(LANG_KEY);
@@ -64,6 +70,7 @@ const {
         }
 
         root.dataset.lang = lang;
+        root.dataset.langStorageKey = LANG_KEY;
         var langMap = { en: 'en', zh: 'zh-CN', ja: 'ja' };
         root.setAttribute('lang', langMap[lang] || 'en');
       })();

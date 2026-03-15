@@ -15,22 +15,41 @@ const { post } = Astro.props;
 const { Content } = await render(post);
 const { title, date, tags = [] } = post.data;
 
-const formatted = new Date(date).toLocaleDateString('en-US', {
+const formattedEn = new Date(date).toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+
+const formattedZh = new Date(date).toLocaleDateString('zh-CN', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+
+const formattedJa = new Date(date).toLocaleDateString('ja-JP', {
   year: 'numeric',
   month: 'long',
   day: 'numeric',
 });
 ---
 
-<BaseLayout title={`${title} — Yanming Shao`}>
-  <!-- Reading progress bar -->
+<BaseLayout
+  title={`${title} — Yanming Shao`}
+  defaultLang="zh"
+  langStorageKey="opendex-travelogue-lang"
+>
   <div class="progress-bar" id="progress-bar" aria-hidden="true">
     <div class="progress-bar__fill" id="progress-fill"></div>
   </div>
 
   <article class="post container" id="article">
     <header class="post__header">
-      <span class="post__date">{formatted}</span>
+      <span class="post__date">
+        <span data-lang-en>{formattedEn}</span>
+        <span data-lang-zh>{formattedZh}</span>
+        <span data-lang-ja>{formattedJa}</span>
+      </span>
       <h1 class="post__title">{title}</h1>
       {tags.length > 0 && (
         <div class="post__tags">
@@ -40,11 +59,19 @@ const formatted = new Date(date).toLocaleDateString('en-US', {
         </div>
       )}
     </header>
-    <div class="prose">
-      <Content />
-    </div>
 
-    <!-- End marker -->
+    <section class="post__sheet">
+      <div class="post__lang-note">
+        <span data-lang-en>Article language</span>
+        <span data-lang-zh>文章语言</span>
+        <span data-lang-ja>記事の言語</span>
+      </div>
+
+      <div class="prose post__prose post__prose--pending" id="post-prose">
+        <Content />
+      </div>
+    </section>
+
     <div class="post__end">
       <span class="post__end-line"></span>
       <span class="post__end-label"><span data-lang-en>End</span><span data-lang-zh>终</span><span data-lang-ja>了</span></span>
@@ -55,6 +82,54 @@ const formatted = new Date(date).toLocaleDateString('en-US', {
   </article>
 
   <script is:inline>
+    function initPostLanguageGroups() {
+      const prose = document.getElementById('post-prose');
+      if (!prose || prose.dataset.grouped === 'true') return;
+
+      const nodes = Array.from(prose.children);
+      const fragment = document.createDocumentFragment();
+      let currentGroup = null;
+
+      function detectLangMarker(element) {
+        if (!element || element.tagName !== 'P') return null;
+        const text = (element.textContent || '').replace(/\s+/g, ' ').trim();
+        if (/^中文\s*\|?$/.test(text)) return 'zh';
+        if (/^EN\s*\|?$/.test(text)) return 'en';
+        if (/^日本語\s*\|?$/.test(text)) return 'ja';
+        return null;
+      }
+
+      nodes.forEach((node) => {
+        const lang = detectLangMarker(node);
+        const isBoundary = /^H[1-6]$/.test(node.tagName) || node.tagName === 'HR';
+
+        if (lang) {
+          currentGroup = document.createElement('div');
+          currentGroup.className = 'post__lang-group';
+          currentGroup.dataset.langGroup = lang;
+          fragment.appendChild(currentGroup);
+          return;
+        }
+
+        if (isBoundary) {
+          currentGroup = null;
+          fragment.appendChild(node);
+          return;
+        }
+
+        if (currentGroup) {
+          currentGroup.appendChild(node);
+          return;
+        }
+
+        fragment.appendChild(node);
+      });
+
+      prose.replaceChildren(fragment);
+      prose.dataset.grouped = 'true';
+      prose.classList.remove('post__prose--pending');
+    }
+
     function initProgress() {
       const fill = document.getElementById('progress-fill');
       const article = document.getElementById('article');
@@ -90,13 +165,14 @@ const formatted = new Date(date).toLocaleDateString('en-US', {
       updateProgress();
     }
 
-    // Support Astro view transitions
+    initPostLanguageGroups();
+    initProgress();
+    document.addEventListener('astro:page-load', initPostLanguageGroups);
     document.addEventListener('astro:page-load', initProgress);
   </script>
 </BaseLayout>
 
 <style>
-  /* ─── Progress Bar ─── */
   .progress-bar {
     position: fixed;
     top: 3.75rem;
@@ -117,22 +193,21 @@ const formatted = new Date(date).toLocaleDateString('en-US', {
     box-shadow: 0 0 14px rgba(0, 182, 255, 0.4);
   }
 
-  /* ─── Post Layout ─── */
   .post {
     padding-top: clamp(3.2rem, 8vh, 6.2rem);
   }
 
   .post__header {
-    margin-bottom: 3rem;
-    padding-bottom: 2rem;
-    border-bottom: 1px solid var(--c-border);
+    margin-bottom: 2rem;
+    padding-bottom: 1.6rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     position: relative;
   }
 
   .post__date {
     font-family: var(--font-mono);
     font-size: 0.8rem;
-    color: var(--c-text-muted);
+    color: color-mix(in srgb, var(--c-accent) 46%, #f3dccf 54%);
     display: block;
     margin-bottom: 1rem;
   }
@@ -140,6 +215,7 @@ const formatted = new Date(date).toLocaleDateString('en-US', {
   .post__title {
     margin-bottom: 1rem;
     max-width: 18ch;
+    color: #f6ede4;
   }
 
   .post__tags {
@@ -151,14 +227,116 @@ const formatted = new Date(date).toLocaleDateString('en-US', {
   .post__tag {
     font-size: 0.7rem;
     font-family: var(--font-mono);
-    color: var(--c-text-muted);
-    background: linear-gradient(120deg, rgba(0, 182, 255, 0.12), rgba(255, 95, 134, 0.1));
+    color: #f4e6dc;
+    background: linear-gradient(120deg, rgba(90, 165, 255, 0.16), rgba(255, 121, 170, 0.18));
     padding: 0.2rem 0.6rem;
     border-radius: 999px;
-    border: 1px solid var(--c-border);
+    border: 1px solid rgba(255, 255, 255, 0.12);
   }
 
-  /* ─── End Marker ─── */
+  .post__sheet {
+    position: relative;
+    padding: 1.35rem clamp(1rem, 2.5vw, 1.7rem) 1.6rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background:
+      linear-gradient(180deg, rgba(16, 16, 18, 0.8), rgba(23, 24, 28, 0.88));
+    box-shadow: 0 34px 56px -48px rgba(0, 0, 0, 0.72);
+    overflow: hidden;
+  }
+
+  .post__sheet::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent),
+      url('/art/hero-night.png') center / cover no-repeat;
+    opacity: 0.08;
+    mix-blend-mode: screen;
+    pointer-events: none;
+  }
+
+  .post__lang-note {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    margin-bottom: 1rem;
+    padding: 0.28rem 0.64rem;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #f3e5d8;
+    background: rgba(17, 18, 20, 0.82);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .post__prose {
+    position: relative;
+    z-index: 1;
+    padding: 1.45rem clamp(1rem, 3vw, 2rem) 1.8rem;
+    background:
+      linear-gradient(180deg, rgba(246, 240, 230, 0.985), rgba(235, 225, 211, 0.96));
+    border: 1px solid rgba(92, 80, 66, 0.28);
+    box-shadow:
+      0 22px 34px -30px rgba(0, 0, 0, 0.65),
+      0 1px 0 rgba(255, 255, 255, 0.4) inset;
+  }
+
+  .post__prose--pending > * {
+    opacity: 0;
+  }
+
+  .post__lang-group {
+    display: none;
+  }
+
+  :root[data-lang='en'] .post__lang-group[data-lang-group='en'],
+  :root[data-lang='zh'] .post__lang-group[data-lang-group='zh'],
+  :root[data-lang='ja'] .post__lang-group[data-lang-group='ja'] {
+    display: block;
+  }
+
+  .post :global(.prose h2),
+  .post :global(.prose h3) {
+    color: #7f302d;
+  }
+
+  .post :global(.prose p),
+  .post :global(.prose li) {
+    color: #403631;
+    line-height: 1.9;
+    text-wrap: pretty;
+  }
+
+  .post :global(.prose p:first-of-type) {
+    color: #291f1c;
+  }
+
+  .post :global(.prose strong) {
+    color: #8a2344;
+  }
+
+  .post :global(.prose a) {
+    color: #206cc7;
+  }
+
+  .post :global(.prose li::marker) {
+    color: #b55f4a;
+  }
+
+  .post :global(.prose blockquote) {
+    border-left-color: #b86a53;
+    color: #4c3b56;
+    background: linear-gradient(90deg, rgba(183, 107, 80, 0.08), transparent);
+    padding: 0.55rem 0 0.55rem 1.2rem;
+  }
+
+  .post :global(.prose code) {
+    color: #7f302d;
+    background: rgba(122, 67, 42, 0.08);
+  }
+
   .post__end {
     display: flex;
     align-items: center;
@@ -197,6 +375,22 @@ const formatted = new Date(date).toLocaleDateString('en-US', {
   @media (max-width: 640px) {
     .progress-bar {
       top: 6.2rem;
+    }
+
+    .post__sheet {
+      padding: 0.95rem;
+    }
+
+    .post__prose {
+      padding: 1.15rem 0.95rem 1.3rem;
+    }
+
+    .post__end {
+      gap: 0.6rem;
+    }
+
+    .post__lang-note {
+      font-size: 0.62rem;
     }
   }
 </style>

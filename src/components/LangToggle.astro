@@ -25,10 +25,11 @@
 
   function setLang(lang) {
     var root = document.documentElement;
+    var storageKey = root.dataset.langStorageKey || LANG_KEY;
     root.dataset.lang = lang;
     root.setAttribute('lang', LANG_MAP[lang] || 'en');
     try {
-      localStorage.setItem(LANG_KEY, lang);
+      localStorage.setItem(storageKey, lang);
     } catch(e) {
       // Ignore storage errors in restricted environments.
     }
