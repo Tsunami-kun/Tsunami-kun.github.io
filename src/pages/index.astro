@@ -8,7 +8,11 @@ const visibleWorkIds = new Set(['bimangrasp', 'synpoldex']);
 const works = (await getCollection('works'))
   .filter((work) => visibleWorkIds.has(work.id))
   .sort((a, b) => b.data.year - a.data.year);
+const posts = (await getCollection('posts')).sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
 const featuredWork = works[0];
+const featuredPost = posts[0];
 ---
 
 <BaseLayout title="Yanming Shao — Works, Art, and Music">
@@ -171,6 +175,44 @@ const featuredWork = works[0];
       ))}
     </div>
   </section>
+
+  {featuredPost && (
+    <section class="writing container" data-reveal>
+      <div class="writing__header">
+        <span class="section-marker section-marker--selected" aria-hidden="true">03</span>
+        <h2>
+          <span data-lang-en>Writing</span>
+          <span data-lang-zh>随笔</span>
+          <span data-lang-ja>エッセイ</span>
+        </h2>
+      </div>
+
+      <a href={withBase(`/travelogue/${featuredPost.id}`)} class="writing__card">
+        <div class="writing__paper">
+          <span class="writing__label">
+            <span data-lang-en>Featured Essay</span>
+            <span data-lang-zh>首页文章</span>
+            <span data-lang-ja>掲載エッセイ</span>
+          </span>
+          <h3>{featuredPost.data.title}</h3>
+          <p data-lang-en-block>
+            A short essay on anthropomorphic priors, body schema, and why embodied AI still lacks many verified beliefs.
+          </p>
+          <p data-lang-zh-block>
+            一篇关于拟人先验、身体图式，以及为何具身智能仍缺少许多经过验证信念的短文。
+          </p>
+          <p data-lang-ja-block>
+            擬人的なプライア、身体図式、そして具身AIがいまだ多くの検証済み信念を欠いている理由についての短い文章です。
+          </p>
+        </div>
+
+        <div class="writing__meta">
+          <span class="writing__tag">Travelogue</span>
+          <span class="writing__arrow">&rarr;</span>
+        </div>
+      </a>
+    </section>
+  )}
 </BaseLayout>
 
 <style>
@@ -625,6 +667,100 @@ const featuredWork = works[0];
     z-index: 1;
   }
 
+  .writing {
+    margin-top: 2rem;
+  }
+
+  .writing__header {
+    display: flex;
+    align-items: baseline;
+    gap: 0.8rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .writing__header h2 {
+    font-size: clamp(1.5rem, 2.6vw, 2.1rem);
+    color: #efe8df;
+  }
+
+  .writing__card {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 1rem;
+    align-items: end;
+    padding: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background:
+      linear-gradient(180deg, rgba(16, 16, 18, 0.8), rgba(23, 24, 28, 0.88));
+    box-shadow: 0 34px 56px -48px rgba(0, 0, 0, 0.72);
+    text-decoration: none;
+  }
+
+  .writing__paper {
+    padding: 1.15rem 1.2rem 1.1rem;
+    background:
+      linear-gradient(180deg, rgba(244, 239, 230, 0.97), rgba(228, 220, 207, 0.95));
+    border: 1px solid rgba(92, 80, 66, 0.28);
+    box-shadow:
+      0 22px 34px -30px rgba(0, 0, 0, 0.65),
+      0 1px 0 rgba(255, 255, 255, 0.4) inset;
+    color: #231d19;
+  }
+
+  .writing__label {
+    display: inline-flex;
+    margin-bottom: 0.7rem;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #7f302d;
+  }
+
+  .writing__paper h3 {
+    margin-bottom: 0.55rem;
+    color: #201914;
+    line-height: 1.22;
+  }
+
+  .writing__paper p {
+    max-width: 54ch;
+    line-height: 1.7;
+    color: #5b5249;
+  }
+
+  .writing__meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.55rem;
+  }
+
+  .writing__tag,
+  .writing__arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.3rem;
+    padding: 0.25rem 0.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #efe4d8;
+    background: rgba(15, 16, 18, 0.82);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .writing__arrow {
+    min-width: 2.3rem;
+    transition: transform 0.25s ease;
+  }
+
+  .writing__card:hover .writing__arrow {
+    transform: translateX(3px);
+  }
+
   @keyframes evidence-pan {
     0% {
       object-position: 50% 32%;
@@ -696,6 +832,17 @@ const featuredWork = works[0];
     .selected__header {
       align-items: center;
       flex-wrap: wrap;
+    }
+
+    .writing__card {
+      grid-template-columns: 1fr;
+      align-items: stretch;
+    }
+
+    .writing__meta {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
     }
   }
 
