@@ -22,7 +22,7 @@ const postNotes: Record<string, string> = {
 };
 
 function getPostNote(id: string) {
-  return postNotes[id] ?? 'Notes from research, travel, and long detours.';
+  return postNotes[id] ?? 'Notes from research and travel.';
 }
 
 function formatDate(date: string, locale: string) {
@@ -42,16 +42,16 @@ function formatDate(date: string, locale: string) {
         <p class="hero__name">Yanming Shao</p>
 
         <p class="hero__lede hero__lede--dispatch" data-lang-en-block>
-          <span class="hero__dispatch-label">Pacific Dispatch</span>
-          <span id="hero-dispatch-en">Pacific Time --:--. San Francisco is under low cloud.</span>
+          <span class="hero__dispatch-label">Pacific Time / Weather</span>
+          <span id="hero-dispatch-en">Pacific Time --:--. San Francisco: --°C, low cloud, wind -- km/h.</span>
         </p>
         <p class="hero__lede hero__lede--dispatch" data-lang-zh-block>
-          <span class="hero__dispatch-label">Pacific Dispatch</span>
-          <span id="hero-dispatch-zh">太平洋时间 --:--。旧金山低云压城，海湾来风。</span>
+          <span class="hero__dispatch-label">太平洋时间 / 天气</span>
+          <span id="hero-dispatch-zh">太平洋时间 --:--。旧金山：--°C，低云，风速 -- km/h。</span>
         </p>
         <p class="hero__lede hero__lede--dispatch" data-lang-ja-block>
-          <span class="hero__dispatch-label">Pacific Dispatch</span>
-          <span id="hero-dispatch-ja">太平洋時間 --:--。サンフランシスコは低い雲の下、湾から風。</span>
+          <span class="hero__dispatch-label">太平洋時間 / 天気</span>
+          <span id="hero-dispatch-ja">太平洋時間 --:--。サンフランシスコ：--°C、低い雲、風速 -- km/h。</span>
         </p>
 
         <nav class="hero__routes" aria-label="Primary">
@@ -128,9 +128,9 @@ function formatDate(date: string, locale: string) {
                 <span data-lang-zh>画面</span>
                 <span data-lang-ja>絵</span>
               </span>
-              <p data-lang-en-block>Ruins, weather, and a little light.</p>
-              <p data-lang-zh-block>废墟、天气，还有一点微光。</p>
-              <p data-lang-ja-block>廃墟と天気、そしてわずかな光。</p>
+              <p data-lang-en-block>Selected artwork.</p>
+              <p data-lang-zh-block>一张选的画。</p>
+              <p data-lang-ja-block>掲載した絵です。</p>
             </div>
           </article>
 
@@ -217,7 +217,7 @@ function formatDate(date: string, locale: string) {
           <span data-lang-zh>游记</span>
           <span data-lang-ja>旅行記</span>
           </h2>
-          <p class="writing__subtitle">Notes from research, conferences, and the road.</p>
+          <p class="writing__subtitle">Research notes and travel notes.</p>
         </div>
         <a href={withBase('/travelogue')} class="selected__see-all">
           <span data-lang-en>All travelogue</span>

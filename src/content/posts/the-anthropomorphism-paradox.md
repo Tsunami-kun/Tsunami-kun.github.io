@@ -34,7 +34,7 @@ Historically, an AI-native account would begin with human-centralism in computer
 
 So I think one can advance a debatable but defensible claim: anthropocentrism in embodied AI is a non-specific *cognitive prior*, something people rarely bother to test carefully. We assume human manipulation strategies are near-optimal for general-purpose object interaction in human environments. We assume the morphology of the human hand encodes useful inductive biases for learning. We assume demonstrations collected from human operators transfer meaningfully to non-human kinematics. These are all empirical claims, and almost none have been rigorously verified.
 
-When that anthropocentric prior lacks compelling engineering proof, it is challenged by engineering practice. Sometimes it is simply an economically rational decision to adapt humans to robot characteristics. I want to approach this question indirectly rather than deliver a blunt verdict from current observations. I expect it will pull in several entangled topics: continental philosophy, phenomena, mind, body, multi-fingered hands, and Zhuangzi and the long shadow he cast over the millennium after the Warring States.
+When that anthropocentric prior lacks compelling engineering proof, it is challenged by engineering practice. Sometimes it is simply an economically rational decision to adapt humans to robot characteristics. I want to approach this question indirectly rather than deliver a blunt verdict from current observations. It brings together several topics: continental philosophy, phenomena, mind, body, multi-fingered hands, and Zhuangzi.
 
 **日本語** |
 Embodied AIは形成途上の科学として、十分に検証された普遍的信念をまだ持っていない。年明けにhumanlikenessを売りにした数本の投稿を準備する中で、この概念の認識論的な位置づけは何度も揺らいだ。
@@ -45,7 +45,7 @@ Embodied AIは形成途上の科学として、十分に検証された普遍的
 
 したがって、私は一つの論争的だが擁護可能な見方を提出できると思う。具身AIにおける人間中心主義は、非具体的な*認知プライア*であり、人々がめったに丁寧に検証しないものだ。人間の操作戦略は、人間環境における汎用的な物体操作に対して近似最適であるという仮定。人間の手の形態は、学習に有用な帰納バイアスをエンコードしているという仮定。人間オペレーターから得たデモンストレーションは、非人間的運動学にも意味ある形で転移するという仮定。いずれも経験的主張であり、厳密に検証されたものはほとんどない。
 
-この人間中心プライアが説得的なengineering proofを欠くとき、engineering practiceから挑戦を受ける。人間をロボットの特性に適応させること自体が、経済合理的な判断である場合もある。もちろん、私は現時点のobservationsから武断的な結論を下したいのではなく、むしろ迂回的にこの問題を論じたい。そこには、大陸哲学、現象、心、身体、多指ハンド、そして戦国以後千年以上にわたって伸びる荘周の影といった、絡み合った話題が関わってくるだろう。
+この人間中心プライアが説得的なengineering proofを欠くとき、engineering practiceから挑戦を受ける。人間をロボットの特性に適応させること自体が、経済合理的な判断である場合もある。もちろん、私は現時点のobservationsから武断的な結論を下したいのではなく、むしろ迂回的にこの問題を論じたい。そこには、大陸哲学、現象、心、身体、多指ハンド、そして荘周といった話題が関わってくるだろう。
 
 ---
 
@@ -77,7 +77,7 @@ So to what extent can we say that humanoids with dexterous hands also possess so
 ## 什么是AI的具身认知？ / What Is Embodied Cognition for AI?
 
 **中文** |
-我们几乎可以用一个脑筋急转弯来断言，所有AI都已经具备某种具身性：Claude和GPT是数据库里的天才、机房中的幽灵，电子像神经递质一样进出寄存器。然而，AI也必定带着一种把自己幻想为人类的具身谵妄，因为原始语料几乎都来自人类的第一视角。若说AI只是语言数据的复读机，那么它构造一个完整“自我”的最可行方式，便是把自己想象成一个类人代理。
+我们几乎可以说，所有 AI 都已经具有某种具身性：它们运行在具体的硬件、存储和计算流程里。然而，AI 也很容易把自己理解成“像人一样”的代理，因为原始语料几乎都来自人类的第一视角。若说 AI 主要是在重组语言数据，那么它构造一个连贯“自我”的最直接方式，往往就是把自己想象成一个类人代理。
 
 从这个角度看，基于synthetic data / traditional kinematic / dynamic simulation的数据生成，莫非也是一种trap，类似乔姆斯基生成语法的trap？做BimanGrasp时，我一直在想这个困惑。从原则上说，我们完全可以构造一种几乎不依赖拟人先验、只依赖大规模搜索与物理验证的数据生成程序；如果这条路走得通，拟人循环就未必是唯一入口。
 
@@ -100,7 +100,7 @@ $$E_{\text{self}} = \sum_{k} \max\bigl(0,\; -\text{SDF}_{\text{hand}}(\mathbf{p}
 对总能量 $E = \lambda_1 E_{\text{contact}} + \lambda_2 E_{\text{penetration}} + \lambda_3 E_{\text{joint}} + \lambda_4 E_{\text{self}}$ 做梯度下降，就是grasp synthesis的核心loop。对BimanGrasp来说，还需要额外的inter-hand penetration term来处理双手之间的排斥。它几乎是纯粹的计算几何，Newtonian。这个想法当然不是BimanGrasp（双手抓取）的原创。单手抓取已有DexGraspNet珠玉在前，更早还能追溯到Hongkai Dai和Tedrake在2015年的IJRR。其后，思哲又把单双手抓取的Sim2Real统一进一个框架。我们欣喜地看到，human bias的minimalism也能产生很强的dexterous hand动作，虽然，not quite scalable yet.
 
 **EN** |
-One can almost argue, as a riddle, that all AI already has a kind of embodiment: Claude and GPT are geniuses in databases, ghosts in server rooms, electrons moving through registers like neurotransmitters. Yet AI must also carry an embodied delirium in which it imagines itself to be human, because its original corpus is drawn almost entirely from the human first-person perspective. If AI is a parrot of linguistic data, then the most viable way for it to construct a coherent self is to imagine itself as a human-like agent.
+One can argue that all AI already has a kind of embodiment: it runs on concrete hardware, storage, and compute. Yet AI also tends to model itself as a human-like agent, because its original corpus is drawn almost entirely from the human first-person perspective. If AI mainly recombines linguistic data, then the most direct way for it to construct a coherent self is to imagine itself in anthropomorphic terms.
 
 From this angle, could data generation based on synthetic data / traditional kinematic / dynamic simulation also be a trap, analogous to the trap of Chomsky's generative grammar? I kept turning this over while working on BimanGrasp. In principle, we could construct a data-generation procedure that depends almost not at all on anthropomorphic priors, relying instead on large-scale search and physical verification. If that route works, then the anthropomorphic circle is not the only entrance.
 
@@ -125,7 +125,7 @@ Gradient descent on the total energy $E = \lambda_1 E_{\text{contact}} + \lambda
 The idea is of course not original to BimanGrasp (bimanual grasping). For single-hand grasping, DexGraspNet set the precedent, and one can trace the line back further to Hongkai Dai and Tedrake's 2015 IJRR paper. Later, Sizhe unified single- and bimanual-grasping Sim2Real in one framework. It is encouraging to see that a minimalism of human bias can already yield strong dexterous-hand behavior, though not quite scalable yet.
 
 **日本語** |
-ほとんど頓智のような言い方で、すべてのAIはすでにある種の具身性を備えていると主張できる。ClaudeもGPTも、データベースの中の天才であり、サーバールームの幽霊であり、電子は神経伝達物質のようにレジスタを出入りしている。しかしAIは同時に、自らを人間だと幻想する一種の具身的譫妄も抱えているはずだ。原初のコーパスがほとんどすべて人間の一人称視点に由来するからである。AIが言語データの復唱機だとすれば、まとまった自己を構築する最も実行可能な方法は、自らを人間的エージェントとして想像することになる。
+すべてのAIはすでにある種の具身性を備えていると言える。実際には、具体的なハードウェア、記憶装置、計算資源の上で動いているからである。その一方で、AIは自分を人間に近いエージェントとして理解しやすい。原初のコーパスがほとんどすべて人間の一人称視点に由来するからだ。AIが主に言語データを組み替えているのだとすれば、まとまった自己像を作る最も直接的な方法は、自らを人間的なエージェントとして想定することになる。
 
 この観点から見ると、synthetic data / traditional kinematic / dynamic simulationに基づくデータ生成もまた、チョムスキーの生成文法のtrapに似たtrapなのだろうか。BimanGraspに取り組みながら、私はこの困惑を考え続けていた。原則的には、擬人的なプライアにほとんど依存せず、大規模探索と物理的verificationだけに依拠するデータ生成手続きを構成できるはずだ。もしそのルートが成立するなら、擬人循環は唯一の入口ではない。
 
@@ -207,4 +207,3 @@ There is no clean conclusion here, and there may not need to be one. We are insi
 9. Dreyfus, H.L. (2002). "Intelligence without Representation." *Phenomenology and the Cognitive Sciences*, 1(4), 367–383.
 10. Shao, Y. & Xiao, C. (2024). "Bimanual Grasp Synthesis for Dexterous Robot Hands." *IEEE Robotics and Automation Letters*, 9(12), 11377–11384. DOI: 10.1109/LRA.2024.3490393. Presented at ICRA 2025.
 11. Shao, Y., Ding, Y. & Xiao, C. (2025). "SynPolDex: Synergizing Fingers via Bi-Level Policy Learning." *IEEE-RAS International Conference on Humanoid Robots (Humanoids)*, Seoul.
-
