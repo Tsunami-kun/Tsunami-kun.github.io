@@ -214,7 +214,7 @@ import { withBase } from '@/lib/withBase';
   .about__eyebrow {
     font-family: var(--font-mono);
     font-size: 0.74rem;
-    color: var(--c-text-muted);
+    color: color-mix(in srgb, #c3a06f 52%, var(--c-text-muted) 48%);
     letter-spacing: 0.11em;
     text-transform: uppercase;
     margin-bottom: 0.85rem;
@@ -223,11 +223,12 @@ import { withBase } from '@/lib/withBase';
   .about__header h1 {
     margin-bottom: 0.8rem;
     max-width: 18ch;
+    color: color-mix(in srgb, #f3e2cd 82%, #b88756 18%);
   }
 
   .about__lead {
     font-size: 1.03rem;
-    color: var(--c-text-muted);
+    color: color-mix(in srgb, #ead9c6 38%, var(--c-text) 62%);
     max-width: 56ch;
     line-height: 1.65;
   }
@@ -237,7 +238,7 @@ import { withBase } from '@/lib/withBase';
     font-size: 0.95rem;
     line-height: 1.8;
     max-width: 64ch;
-    color: color-mix(in srgb, var(--c-text) 78%, var(--c-text-muted) 22%);
+    color: color-mix(in srgb, #d8c0a0 18%, var(--c-text) 82%);
   }
 
   .about__collab a {
@@ -276,12 +277,13 @@ import { withBase } from '@/lib/withBase';
   .about-card h2 {
     font-size: 1.25rem;
     margin-bottom: 0.45rem;
+    color: color-mix(in srgb, #e7d3bd 72%, #a36743 28%);
   }
 
   .about-card p {
     font-size: 0.9rem;
     line-height: 1.55;
-    color: var(--c-text-muted);
+    color: color-mix(in srgb, #d6c0a7 26%, var(--c-text-muted) 74%);
   }
 
   .about__links {
@@ -300,13 +302,14 @@ import { withBase } from '@/lib/withBase';
     font-size: 0.68rem;
     letter-spacing: 0.09em;
     text-transform: uppercase;
-    color: color-mix(in srgb, var(--c-accent) 65%, var(--c-text) 35%);
+    color: color-mix(in srgb, #d2ab76 48%, var(--c-accent) 28%, var(--c-text) 24%);
     transition: transform 0.2s, border-color 0.2s;
   }
 
   .about__link:hover {
     transform: translateX(2px);
     border-color: color-mix(in srgb, var(--c-accent) 52%, var(--c-border) 48%);
+    color: color-mix(in srgb, #e2c091 54%, var(--c-accent-2) 22%, var(--c-text) 24%);
   }
 
   @keyframes chip-float {
