@@ -54,6 +54,29 @@ import { withBase } from '@/lib/withBase';
       <p class="about__lead" data-lang-ja-block>
         現在、2026 Fall PhD の機会を探しています。このサイトは論文と絵と音楽の小さな記録でもあります。
       </p>
+      <p class="about__collab" data-lang-en-block>
+        His work centers on dexterous manipulation, data generation, and policy learning for embodied agents. He has worked with
+        <a href="https://sist.shanghaitech.edu.cn/xcx/list.htm" target="_blank" rel="noreferrer">Chenxi Xiao</a>,
+        <a href="https://yding25.com/" target="_blank" rel="noreferrer">Yan Ding</a>,
+        <a href="https://machengshen.github.io/" target="_blank" rel="noreferrer">Macheng Shen</a>, and
+        <a href="https://yaomarkmu.github.io/" target="_blank" rel="noreferrer">Yao Mark Mu</a>.
+      </p>
+      <p class="about__collab" data-lang-zh-block>
+        他的工作主要围绕灵巧操作、数据生成与具身智能中的策略学习，也先后与
+        <a href="https://sist.shanghaitech.edu.cn/xcx/list.htm" target="_blank" rel="noreferrer">Chenxi Xiao</a>、
+        <a href="https://yding25.com/" target="_blank" rel="noreferrer">Yan Ding</a>、
+        <a href="https://machengshen.github.io/" target="_blank" rel="noreferrer">Macheng Shen</a>、
+        <a href="https://yaomarkmu.github.io/" target="_blank" rel="noreferrer">Yao Mark Mu</a>
+        合作。
+      </p>
+      <p class="about__collab" data-lang-ja-block>
+        研究の軸は、巧緻操作、データ生成、そして具身エージェントのための方策学習です。これまでに
+        <a href="https://sist.shanghaitech.edu.cn/xcx/list.htm" target="_blank" rel="noreferrer">Chenxi Xiao</a>、
+        <a href="https://yding25.com/" target="_blank" rel="noreferrer">Yan Ding</a>、
+        <a href="https://machengshen.github.io/" target="_blank" rel="noreferrer">Macheng Shen</a>、
+        <a href="https://yaomarkmu.github.io/" target="_blank" rel="noreferrer">Yao Mark Mu</a>
+        と研究を進めてきました。
+      </p>
     </header>
 
     <div class="about__cards">
@@ -203,6 +226,24 @@ import { withBase } from '@/lib/withBase';
     color: var(--c-text-muted);
     max-width: 56ch;
     line-height: 1.65;
+  }
+
+  .about__collab {
+    margin-top: 0.9rem;
+    font-size: 0.95rem;
+    line-height: 1.8;
+    max-width: 64ch;
+    color: color-mix(in srgb, var(--c-text) 78%, var(--c-text-muted) 22%);
+  }
+
+  .about__collab a {
+    color: color-mix(in srgb, var(--c-accent) 52%, var(--c-text) 48%);
+    text-decoration-color: color-mix(in srgb, var(--c-accent) 35%, transparent 65%);
+    text-underline-offset: 0.18em;
+  }
+
+  .about__collab a:hover {
+    color: color-mix(in srgb, var(--c-accent-2) 60%, var(--c-text) 40%);
   }
 
   .about__cards {
