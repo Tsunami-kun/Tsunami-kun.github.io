@@ -46,13 +46,13 @@ import { withBase } from '@/lib/withBase';
         <span data-lang-ja-block>邵彦銘は巧緻なロボットハンドと<br />具身AIを研究しています。</span>
       </h1>
       <p class="about__lead" data-lang-en-block>
-        He is currently looking for Fall 2026 PhD opportunities. This site keeps a small record of papers, images, and music.
+        He is currently looking for Fall 2026 PhD opportunities.
       </p>
       <p class="about__lead" data-lang-zh-block>
-        他正在寻找 2026 Fall PhD 机会。这个站点也用来放论文、画面和音乐。
+        他正在寻找 2026 Fall PhD 机会。
       </p>
       <p class="about__lead" data-lang-ja-block>
-        現在、2026 Fall PhD の機会を探しています。このサイトは論文と絵と音楽の小さな記録でもあります。
+        現在、2026 Fall PhD の機会を探しています。
       </p>
       <p class="about__collab" data-lang-en-block>
         His work centers on dexterous manipulation, data generation, and policy learning for embodied agents. In order of first collaboration, he has been glad to work with
@@ -77,6 +77,15 @@ import { withBase } from '@/lib/withBase';
         <a href="https://yaomarkmu.github.io/" target="_blank" rel="noreferrer">Yao Mark Mu</a>
         と研究をご一緒できたことを嬉しく思っています。
       </p>
+      <p class="about__interests" data-lang-en-block>
+        Outside work, he returns to Wei-Jin calligraphy, Mahler's symphonies, a broad range of fine art, and has also spent time with serious digital games such as <em>Disco Elysium</em>.
+      </p>
+      <p class="about__interests" data-lang-zh-block>
+        工作之外，也偏爱魏晋书法、马勒的交响乐、广泛的 fine art，也曾花很多时间在《极乐迪斯科》这样的严肃 digital games 上。
+      </p>
+      <p class="about__interests" data-lang-ja-block>
+        研究の外では、魏晋の書、マーラーの交響曲、幅広い fine art に惹かれ、<em>Disco Elysium</em> のような serious digital games にも長く時間を使ってきました。
+      </p>
     </header>
 
     <div class="about__cards">
@@ -94,9 +103,9 @@ import { withBase } from '@/lib/withBase';
       </article>
       <article class="about-card">
         <h2><span data-lang-en>Elsewhere</span><span data-lang-zh>站外</span><span data-lang-ja>そのほか</span></h2>
-        <p data-lang-en-block>Outside the lab: calligraphy, ruined landscapes, and long ambient tracks for late-night reading.</p>
-        <p data-lang-zh-block>实验之外，喜欢书法、带废墟感的画面，以及适合深夜阅读的长环境音乐。</p>
-        <p data-lang-ja-block>研究の外では、書、廃墟の気配をもつ絵、そして夜更けの読書に合う長い環境音が好きです。</p>
+        <p data-lang-en-block>Wei-Jin calligraphy, Mahler's symphonies, fine art, and serious digital games.</p>
+        <p data-lang-zh-block>魏晋书法、马勒交响乐、广泛的 fine art，以及严肃 digital games。</p>
+        <p data-lang-ja-block>魏晋の書、マーラーの交響曲、fine art、そして serious digital games。</p>
       </article>
     </div>
 
@@ -214,7 +223,7 @@ import { withBase } from '@/lib/withBase';
   .about__eyebrow {
     font-family: var(--font-mono);
     font-size: 0.74rem;
-    color: color-mix(in srgb, #c3a06f 52%, var(--c-text-muted) 48%);
+    color: color-mix(in srgb, #b08859 68%, var(--c-text-muted) 32%);
     letter-spacing: 0.11em;
     text-transform: uppercase;
     margin-bottom: 0.85rem;
@@ -223,12 +232,12 @@ import { withBase } from '@/lib/withBase';
   .about__header h1 {
     margin-bottom: 0.8rem;
     max-width: 18ch;
-    color: color-mix(in srgb, #f3e2cd 82%, #b88756 18%);
+    color: color-mix(in srgb, #ecd7bf 70%, #935c37 30%);
   }
 
   .about__lead {
     font-size: 1.03rem;
-    color: color-mix(in srgb, #ead9c6 38%, var(--c-text) 62%);
+    color: color-mix(in srgb, #d9b894 12%, var(--c-text) 88%);
     max-width: 56ch;
     line-height: 1.65;
   }
@@ -238,7 +247,7 @@ import { withBase } from '@/lib/withBase';
     font-size: 0.95rem;
     line-height: 1.8;
     max-width: 64ch;
-    color: color-mix(in srgb, #d8c0a0 18%, var(--c-text) 82%);
+    color: color-mix(in srgb, #cfad83 10%, var(--c-text) 90%);
   }
 
   .about__collab a {
@@ -249,6 +258,19 @@ import { withBase } from '@/lib/withBase';
 
   .about__collab a:hover {
     color: color-mix(in srgb, var(--c-accent-2) 60%, var(--c-text) 40%);
+  }
+
+  .about__interests {
+    margin-top: 0.75rem;
+    font-size: 0.94rem;
+    line-height: 1.8;
+    max-width: 64ch;
+    color: color-mix(in srgb, #b47b58 18%, var(--c-text) 82%);
+  }
+
+  .about__interests em {
+    color: color-mix(in srgb, #3f6c75 36%, #8d4c38 64%);
+    font-style: italic;
   }
 
   .about__cards {
@@ -283,7 +305,7 @@ import { withBase } from '@/lib/withBase';
   .about-card p {
     font-size: 0.9rem;
     line-height: 1.55;
-    color: color-mix(in srgb, #d6c0a7 26%, var(--c-text-muted) 74%);
+    color: color-mix(in srgb, #c6a27a 14%, var(--c-text) 86%);
   }
 
   .about__links {
