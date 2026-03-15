@@ -73,9 +73,9 @@ const featuredPost = posts[0];
 
           <div class="hero__note">
             <span class="hero__note-label">
-              <span data-lang-en>2026 Fall</span>
-              <span data-lang-zh>26 Fall PhD</span>
-              <span data-lang-ja>26 Fall PhD</span>
+              <span data-lang-en><span class="hero__note-label-accent">Seeking</span> 26 Fall PhD</span>
+              <span data-lang-zh><span class="hero__note-label-accent">Seeking</span> 26 Fall PhD</span>
+              <span data-lang-ja><span class="hero__note-label-accent">Seeking</span> 26 Fall PhD</span>
             </span>
             <p data-lang-en-block>I am looking for Fall 2026 PhD opportunities in embodied AI, dexterous manipulation, and VLA.</p>
             <p data-lang-zh-block>正在寻找 2026 Fall PhD 机会，方向包括具身智能、灵巧操作和 VLA。</p>
@@ -425,6 +425,10 @@ const featuredPost = posts[0];
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: #7f302d;
+  }
+
+  .hero__note-label-accent {
+    color: #b38a4a;
   }
 
   .hero__note p {

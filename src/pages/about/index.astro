@@ -32,9 +32,9 @@ import { withBase } from '@/lib/withBase';
         <span data-lang-ja>絵と音楽</span>
       </div>
       <div class="about__chip about__chip--right">
-        <span data-lang-en>26 Fall PhD</span>
-        <span data-lang-zh>26 Fall PhD</span>
-        <span data-lang-ja>26 Fall PhD</span>
+        <span data-lang-en><span class="about__chip-accent">Seeking</span> 26 Fall PhD</span>
+        <span data-lang-zh><span class="about__chip-accent">Seeking</span> 26 Fall PhD</span>
+        <span data-lang-ja><span class="about__chip-accent">Seeking</span> 26 Fall PhD</span>
       </div>
     </div>
 
@@ -181,6 +181,10 @@ import { withBase } from '@/lib/withBase';
     text-transform: uppercase;
     color: color-mix(in srgb, var(--c-accent) 62%, var(--c-text) 38%);
     animation: chip-float 4.5s ease-in-out infinite;
+  }
+
+  .about__chip-accent {
+    color: color-mix(in srgb, #d7ae74 72%, var(--c-accent) 28%);
   }
 
   .about__chip--left {
