@@ -89,14 +89,52 @@ const formattedJa = new Date(date).toLocaleDateString('ja-JP', {
       const nodes = Array.from(prose.children);
       const fragment = document.createDocumentFragment();
       let currentGroup = null;
+      const markerMap = {
+        zh: '中文',
+        en: 'EN',
+        ja: '日本語',
+      };
 
       function detectLangMarker(element) {
         if (!element || element.tagName !== 'P') return null;
         const text = (element.textContent || '').replace(/\s+/g, ' ').trim();
-        if (/^中文\s*\|?$/.test(text)) return 'zh';
-        if (/^EN\s*\|?$/.test(text)) return 'en';
-        if (/^日本語\s*\|?$/.test(text)) return 'ja';
+        if (/^中文(?:\s*\|)?(?:\s|$)/.test(text)) return 'zh';
+        if (/^EN(?:\s*\|)?(?:\s|$)/.test(text)) return 'en';
+        if (/^日本語(?:\s*\|)?(?:\s|$)/.test(text)) return 'ja';
         return null;
+      }
+
+      function stripLangMarker(element, lang) {
+        const clone = element.cloneNode(true);
+        const markerLabel = markerMap[lang];
+
+        while (clone.firstChild) {
+          const firstChild = clone.firstChild;
+
+          if (
+            firstChild.nodeType === Node.ELEMENT_NODE &&
+            firstChild.tagName === 'STRONG' &&
+            (firstChild.textContent || '').replace(/\s+/g, ' ').trim() === markerLabel
+          ) {
+            clone.removeChild(firstChild);
+            continue;
+          }
+
+          if (firstChild.nodeType === Node.TEXT_NODE) {
+            const cleanedText = (firstChild.textContent || '').replace(/^\s*\|\s*/, '').replace(/^\s+/, '');
+
+            if (!cleanedText) {
+              clone.removeChild(firstChild);
+              continue;
+            }
+
+            firstChild.textContent = cleanedText;
+          }
+
+          break;
+        }
+
+        return clone.textContent && clone.textContent.trim() ? clone : null;
       }
 
       nodes.forEach((node) => {
@@ -108,6 +146,12 @@ const formattedJa = new Date(date).toLocaleDateString('ja-JP', {
           currentGroup.className = 'post__lang-group';
           currentGroup.dataset.langGroup = lang;
           fragment.appendChild(currentGroup);
+
+          const cleanedNode = stripLangMarker(node, lang);
+          if (cleanedNode) {
+            currentGroup.appendChild(cleanedNode);
+          }
+
           return;
         }
 
