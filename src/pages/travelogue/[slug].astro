@@ -13,7 +13,7 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
-const { title, date, tags = [] } = post.data;
+const { title, date, originalDate, tags = [] } = post.data;
 
 const formattedEn = new Date(date).toLocaleDateString('en-US', {
   year: 'numeric',
@@ -32,6 +32,30 @@ const formattedJa = new Date(date).toLocaleDateString('ja-JP', {
   month: 'long',
   day: 'numeric',
 });
+
+const formattedOriginalEn = originalDate
+  ? new Date(originalDate).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    })
+  : null;
+
+const formattedOriginalZh = originalDate
+  ? new Date(originalDate).toLocaleDateString('zh-CN', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    })
+  : null;
+
+const formattedOriginalJa = originalDate
+  ? new Date(originalDate).toLocaleDateString('ja-JP', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    })
+  : null;
 ---
 
 <BaseLayout
@@ -45,11 +69,20 @@ const formattedJa = new Date(date).toLocaleDateString('ja-JP', {
 
   <article class="post container" id="article">
     <header class="post__header">
-      <span class="post__date">
-        <span data-lang-en>{formattedEn}</span>
-        <span data-lang-zh>{formattedZh}</span>
-        <span data-lang-ja>{formattedJa}</span>
-      </span>
+      <div class="post__date-stack">
+        <span class="post__date">
+          <span data-lang-en>{formattedEn}</span>
+          <span data-lang-zh>{formattedZh}</span>
+          <span data-lang-ja>{formattedJa}</span>
+        </span>
+        {formattedOriginalEn && formattedOriginalZh && formattedOriginalJa && (
+          <span class="post__date-secondary">
+            <span data-lang-en>First draft: {formattedOriginalEn}</span>
+            <span data-lang-zh>初版：{formattedOriginalZh}</span>
+            <span data-lang-ja>初稿: {formattedOriginalJa}</span>
+          </span>
+        )}
+      </div>
       <h1 class="post__title">{title}</h1>
       {tags.length > 0 && (
         <div class="post__tags">
@@ -260,12 +293,26 @@ const formattedJa = new Date(date).toLocaleDateString('ja-JP', {
     position: relative;
   }
 
+  .post__date-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0.32rem;
+    margin-bottom: 1rem;
+  }
+
   .post__date {
     font-family: var(--font-mono);
     font-size: 0.8rem;
     color: color-mix(in srgb, var(--post-brass) 68%, #f6e8d5 32%);
     display: block;
-    margin-bottom: 1rem;
+  }
+
+  .post__date-secondary {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--post-oxide) 34%, var(--post-sepia) 66%);
   }
 
   .post__title {

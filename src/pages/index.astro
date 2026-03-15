@@ -13,6 +13,35 @@ const posts = (await getCollection('posts')).sort(
 );
 const featuredWork = works[0];
 const featuredPost = posts[0];
+
+const postNotes: Record<string, { en: string; zh: string; ja: string }> = {
+  formal_structures_of_complex_networks: {
+    en: 'A reconstructed manuscript on complex networks, Curry–Howard, and what counts as structure.',
+    zh: '一篇从 2021 年手稿重构出的文章，谈复杂网络、Curry–Howard，以及结构究竟是什么。',
+    ja: '2021年の原稿を組み直した一篇で、複雑ネットワークと Curry–Howard、そして構造とは何かを考える。',
+  },
+  'the-anthropomorphism-paradox': {
+    en: 'A note on anthropomorphic priors, body schema, and what embodied AI still has not verified.',
+    zh: '一篇关于拟人先验、身体图式，以及具身智能仍未认真验证之物的笔记。',
+    ja: '擬人化のプライア、身体図式、そして具身AIがまだ十分に検証していないものについてのノート。',
+  },
+};
+
+function getPostNote(id: string) {
+  return postNotes[id] ?? {
+    en: 'Notes from travel, research, and long detours.',
+    zh: '一些在路上、研究间隙和长绕路里写下的笔记。',
+    ja: '旅と研究のあいだに書かれたノート。',
+  };
+}
+
+function formatDate(date: string, locale: string) {
+  return new Date(date).toLocaleDateString(locale, {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  });
+}
 ---
 
 <BaseLayout title="Yanming Shao — Works, Art, and Music">
@@ -22,14 +51,17 @@ const featuredPost = posts[0];
       <div class="hero__copy">
         <p class="hero__name">Yanming Shao</p>
 
-        <p class="hero__lede" data-lang-en-block>
-          Embodied AI for dexterous hands, with a small archive of papers, paintings, and one long lake track.
+        <p class="hero__lede hero__lede--dispatch" data-lang-en-block>
+          <span class="hero__dispatch-label">Pacific Dispatch</span>
+          <span id="hero-dispatch-en">Pacific Time --:--. San Francisco is under low cloud.</span>
         </p>
-        <p class="hero__lede" data-lang-zh-block>
-          这里放几篇关于灵巧手和具身智能的工作，也放画，还有一首很长的湖边音乐。
+        <p class="hero__lede hero__lede--dispatch" data-lang-zh-block>
+          <span class="hero__dispatch-label">Pacific Dispatch</span>
+          <span id="hero-dispatch-zh">太平洋时间 --:--。旧金山低云压城，海湾来风。</span>
         </p>
-        <p class="hero__lede" data-lang-ja-block>
-          巧緻なロボットハンドと具身AIの研究を、絵と長い湖の音楽と一緒に静かに置くページです。
+        <p class="hero__lede hero__lede--dispatch" data-lang-ja-block>
+          <span class="hero__dispatch-label">Pacific Dispatch</span>
+          <span id="hero-dispatch-ja">太平洋時間 --:--。サンフランシスコは低い雲の下、湾から風。</span>
         </p>
 
         <nav class="hero__routes" aria-label="Primary">
@@ -132,15 +164,26 @@ const featuredPost = posts[0];
             </a>
           )}
 
-          <article class="evidence evidence--music">
-            <span class="evidence__pin" aria-hidden="true"></span>
-            <div class="evidence__note">
-              <span class="evidence__tag evidence__tag--dark">Lake</span>
-              <p data-lang-en-block>The player tries to start automatically; if the browser blocks it, the first touch will do.</p>
-              <p data-lang-zh-block>播放器会先试着自动播放；如果被浏览器拦住，点一下页面就会继续。</p>
-              <p data-lang-ja-block>自動再生を試みます。ブラウザに止められた場合は、最初の操作で続きます。</p>
-            </div>
-          </article>
+          {featuredPost && (
+            <a href={withBase(`/travelogue/${featuredPost.id}`)} class="evidence evidence--travelogue">
+              <span class="evidence__pin" aria-hidden="true"></span>
+              {featuredPost.data.thumbnail && (
+                <img
+                  src={withBase(featuredPost.data.thumbnail)}
+                  alt={featuredPost.data.title}
+                  class="evidence__photo evidence__photo--travelogue"
+                  loading="lazy"
+                />
+              )}
+              <div class="evidence__meta">
+                <span class="evidence__tag evidence__tag--dark">Travelogue</span>
+                <p>{featuredPost.data.title}</p>
+                <span class="evidence__caption" data-lang-en>{getPostNote(featuredPost.id).en}</span>
+                <span class="evidence__caption" data-lang-zh>{getPostNote(featuredPost.id).zh}</span>
+                <span class="evidence__caption" data-lang-ja>{getPostNote(featuredPost.id).ja}</span>
+              </div>
+            </a>
+          )}
         </div>
       </div>
     </div>
@@ -176,44 +219,183 @@ const featuredPost = posts[0];
     </div>
   </section>
 
-  {featuredPost && (
+  {posts.length > 0 && (
     <section class="writing container" data-reveal>
       <div class="writing__header">
         <span class="section-marker section-marker--selected" aria-hidden="true">03</span>
         <h2>
-          <span data-lang-en>Writing</span>
-          <span data-lang-zh>随笔</span>
-          <span data-lang-ja>エッセイ</span>
+          <span data-lang-en>Travelogue</span>
+          <span data-lang-zh>游记</span>
+          <span data-lang-ja>旅行記</span>
         </h2>
+        <a href={withBase('/travelogue')} class="selected__see-all">
+          <span data-lang-en>All travelogue</span>
+          <span data-lang-zh>全部游记</span>
+          <span data-lang-ja>すべての旅行記</span>
+        </a>
       </div>
 
-      <a href={withBase(`/travelogue/${featuredPost.id}`)} class="writing__card">
-        <div class="writing__paper">
-          <span class="writing__label">
-            <span data-lang-en>Featured Essay</span>
-            <span data-lang-zh>这篇文章</span>
-            <span data-lang-ja>掲載エッセイ</span>
-          </span>
-          <h3>{featuredPost.data.title}</h3>
-          <p data-lang-en-block>
-            A short essay on anthropomorphic priors, body schema, and why embodied AI still lacks many verified beliefs.
-          </p>
-          <p data-lang-zh-block>
-            一篇谈拟人先验、身体图式，以及具身智能为什么还缺少许多经过认真验证的信念的短文。
-          </p>
-          <p data-lang-ja-block>
-            擬人的なプライア、身体図式、そして具身AIがいまだ多くの検証済み信念を欠いている理由についての短い文章です。
-          </p>
-        </div>
-
-        <div class="writing__meta">
-          <span class="writing__tag">Travelogue</span>
-          <span class="writing__arrow">&rarr;</span>
-        </div>
-      </a>
+      <div class="writing__grid">
+        {posts.map((post) => {
+          const note = getPostNote(post.id);
+          return (
+            <a href={withBase(`/travelogue/${post.id}`)} class="writing-card">
+              {post.data.thumbnail && (
+                <div class="writing-card__thumb-wrap">
+                  <img
+                    src={withBase(post.data.thumbnail)}
+                    alt={post.data.title}
+                    class="writing-card__thumb"
+                    loading="lazy"
+                  />
+                </div>
+              )}
+              <div class="writing-card__body">
+                <span class="writing-card__date">
+                  <span data-lang-en>{formatDate(post.data.date, 'en-US')}</span>
+                  <span data-lang-zh>{formatDate(post.data.date, 'zh-CN')}</span>
+                  <span data-lang-ja>{formatDate(post.data.date, 'ja-JP')}</span>
+                </span>
+                <h3 class="writing-card__title">{post.data.title}</h3>
+                <p class="writing-card__excerpt" data-lang-en>{note.en}</p>
+                <p class="writing-card__excerpt" data-lang-zh>{note.zh}</p>
+                <p class="writing-card__excerpt" data-lang-ja>{note.ja}</p>
+                <div class="writing-card__meta">
+                  <span class="writing-card__tag">Travelogue</span>
+                  <span class="writing-card__arrow">&rarr;</span>
+                </div>
+              </div>
+            </a>
+          );
+        })}
+      </div>
     </section>
   )}
 </BaseLayout>
+
+<script is:inline>
+  function initHeroDispatch() {
+    const targetEn = document.getElementById('hero-dispatch-en');
+    const targetZh = document.getElementById('hero-dispatch-zh');
+    const targetJa = document.getElementById('hero-dispatch-ja');
+    if (!targetEn || !targetZh || !targetJa) return;
+
+    if (window.__opendexHeroDispatchInterval) {
+      clearInterval(window.__opendexHeroDispatchInterval);
+    }
+
+    const weatherText = {
+      en: 'low cloud',
+      zh: '低云',
+      ja: '低い雲',
+    };
+
+    function formatPacificTime() {
+      return new Intl.DateTimeFormat('en-GB', {
+        timeZone: 'America/Los_Angeles',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false,
+      }).format(new Date());
+    }
+
+    function describeWeather(code, lang, isDay) {
+      if (code === 0) {
+        return lang === 'zh'
+          ? (isDay ? '天色放晴' : '天色清朗')
+          : lang === 'ja'
+            ? (isDay ? '晴れ' : '夜気は澄んでいる')
+            : (isDay ? 'clear sky' : 'clear night');
+      }
+      if ([1, 2].includes(code)) {
+        return lang === 'zh'
+          ? '薄云未散'
+          : lang === 'ja'
+            ? '薄い雲'
+            : 'thin cloud';
+      }
+      if (code === 3) {
+        return lang === 'zh'
+          ? '云层很重'
+          : lang === 'ja'
+            ? '厚い雲'
+            : 'heavy cloud';
+      }
+      if ([45, 48].includes(code)) {
+        return lang === 'zh'
+          ? '有雾'
+          : lang === 'ja'
+            ? '霧'
+            : 'fog';
+      }
+      if ([51, 53, 55, 56, 57].includes(code)) {
+        return lang === 'zh'
+          ? '细雨'
+          : lang === 'ja'
+            ? '霧雨'
+            : 'drizzle';
+      }
+      if ([61, 63, 65, 66, 67, 80, 81, 82].includes(code)) {
+        return lang === 'zh'
+          ? '下雨'
+          : lang === 'ja'
+            ? '雨'
+            : 'rain';
+      }
+      if ([71, 73, 75, 77, 85, 86].includes(code)) {
+        return lang === 'zh'
+          ? '有雪'
+          : lang === 'ja'
+            ? '雪'
+            : 'snow';
+      }
+      if ([95, 96, 99].includes(code)) {
+        return lang === 'zh'
+          ? '雷暴'
+          : lang === 'ja'
+            ? '雷'
+            : 'thunder';
+      }
+      return lang === 'zh'
+        ? '天气不明'
+        : lang === 'ja'
+          ? '天気不明'
+          : 'uncertain weather';
+    }
+
+    function render() {
+      const time = formatPacificTime();
+      const temp = typeof weatherText.temp === 'number' ? `${Math.round(weatherText.temp)}°C` : '??°C';
+      const wind = typeof weatherText.wind === 'number' ? `${Math.round(weatherText.wind)} km/h` : '-- km/h';
+      targetEn.textContent = `Pacific Time ${time}. San Francisco keeps its collar up: ${temp}, ${weatherText.en}, wind ${wind} off the bay.`;
+      targetZh.textContent = `太平洋时间 ${time}。旧金山把衣领立得很高：${temp}，${weatherText.zh}，海湾来风 ${wind}。`;
+      targetJa.textContent = `太平洋時間 ${time}。サンフランシスコは襟を立てたまま: ${temp}、${weatherText.ja}、湾からの風 ${wind}。`;
+    }
+
+    render();
+
+    fetch('https://api.open-meteo.com/v1/forecast?latitude=37.7749&longitude=-122.4194&current=temperature_2m,weather_code,wind_speed_10m,is_day&timezone=America%2FLos_Angeles')
+      .then((response) => response.ok ? response.json() : Promise.reject(new Error('weather unavailable')))
+      .then((data) => {
+        const current = data && data.current ? data.current : null;
+        if (!current) return;
+        weatherText.temp = current.temperature_2m;
+        weatherText.wind = current.wind_speed_10m;
+        weatherText.en = describeWeather(current.weather_code, 'en', current.is_day === 1);
+        weatherText.zh = describeWeather(current.weather_code, 'zh', current.is_day === 1);
+        weatherText.ja = describeWeather(current.weather_code, 'ja', current.is_day === 1);
+        render();
+      })
+      .catch(() => {
+        render();
+      });
+
+    window.__opendexHeroDispatchInterval = window.setInterval(render, 60000);
+  }
+
+  initHeroDispatch();
+  document.addEventListener('astro:page-load', initHeroDispatch);
+</script>
 
 <style>
   .hero {
@@ -343,7 +525,21 @@ const featuredPost = posts[0];
     font-size: clamp(1.02rem, 1.45vw, 1.16rem);
     line-height: 1.85;
     color: #4f392f;
-    max-width: 34ch;
+    max-width: 38ch;
+  }
+
+  .hero__lede--dispatch {
+    display: flex;
+    flex-direction: column;
+    gap: 0.32rem;
+  }
+
+  .hero__dispatch-label {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, #3f6c75 42%, #8f342c 58%);
   }
 
   .hero__routes {
@@ -537,7 +733,7 @@ const featuredPost = posts[0];
     transform: rotate(3deg);
   }
 
-  .evidence--music {
+  .evidence--travelogue {
     left: 34%;
     bottom: 12%;
     width: min(16rem, 38%);
@@ -598,6 +794,18 @@ const featuredPost = posts[0];
     font-size: 0.94rem;
     line-height: 1.5;
     color: #433229;
+  }
+
+  .evidence__photo--travelogue {
+    object-position: 30% 46%;
+  }
+
+  .evidence__caption {
+    display: block;
+    margin-top: 0.38rem;
+    font-size: 0.82rem;
+    line-height: 1.55;
+    color: #6a5749;
   }
 
   .evidence__note {
@@ -679,6 +887,8 @@ const featuredPost = posts[0];
   .writing__header {
     display: flex;
     align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
     gap: 0.8rem;
     margin-bottom: 1.25rem;
   }
@@ -688,66 +898,108 @@ const featuredPost = posts[0];
     color: #ecd7cc;
   }
 
-  .writing__card {
+  .writing__grid {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 1rem;
-    align-items: end;
-    padding: 1rem;
+  }
+
+  .writing-card {
+    display: grid;
+    grid-template-columns: minmax(112px, 0.34fr) minmax(0, 1fr);
+    gap: 0.9rem;
+    align-items: stretch;
+    padding: 0.85rem;
     border: 1px solid rgba(255, 255, 255, 0.08);
     background:
       linear-gradient(180deg, rgba(16, 16, 18, 0.8), rgba(23, 24, 28, 0.88));
     box-shadow: 0 34px 56px -48px rgba(0, 0, 0, 0.72);
     text-decoration: none;
+    transition: transform 0.3s var(--ease-out-expo), border-color 0.3s ease, box-shadow 0.3s ease;
   }
 
-  .writing__paper {
-    padding: 1.15rem 1.2rem 1.1rem;
+  .writing-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(187, 142, 93, 0.24);
+    box-shadow: 0 36px 58px -44px rgba(0, 0, 0, 0.76);
+  }
+
+  .writing-card__thumb-wrap {
+    position: relative;
+    overflow: hidden;
+    min-height: 100%;
+    border: 1px solid rgba(92, 80, 66, 0.28);
     background:
       linear-gradient(180deg, rgba(244, 239, 230, 0.97), rgba(228, 220, 207, 0.95));
-    border: 1px solid rgba(92, 80, 66, 0.28);
-    box-shadow:
-      0 22px 34px -30px rgba(0, 0, 0, 0.65),
-      0 1px 0 rgba(255, 255, 255, 0.4) inset;
+  }
+
+  .writing-card__thumb-wrap::before {
+    content: '';
+    position: absolute;
+    top: -0.28rem;
+    right: 0.7rem;
+    width: 2.9rem;
+    height: 0.8rem;
+    background: rgba(214, 203, 185, 0.56);
+    border: 1px solid rgba(103, 91, 77, 0.12);
+    transform: rotate(7deg);
+    z-index: 1;
+  }
+
+  .writing-card__thumb {
+    width: 100%;
+    height: 100%;
+    min-height: 160px;
+    object-fit: cover;
+    object-position: 32% 48%;
+    filter: saturate(0.84) contrast(1.02);
+    animation: evidence-pan 20s ease-in-out infinite alternate;
+  }
+
+  .writing-card__body {
+    display: flex;
+    flex-direction: column;
+    padding: 0.22rem 0.15rem 0.1rem;
     color: #231d19;
   }
 
-  .writing__label {
+  .writing-card__date {
     display: inline-flex;
-    margin-bottom: 0.7rem;
+    margin-bottom: 0.55rem;
     font-family: var(--font-mono);
-    font-size: 0.68rem;
+    font-size: 0.67rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: #7b4237;
+    color: #c7a574;
   }
 
-  .writing__paper h3 {
-    margin-bottom: 0.55rem;
-    color: #37231d;
+  .writing-card__title {
+    margin-bottom: 0.5rem;
+    color: #efdfce;
     line-height: 1.22;
   }
 
-  .writing__paper p {
-    max-width: 54ch;
-    line-height: 1.7;
-    color: #605047;
+  .writing-card__excerpt {
+    line-height: 1.68;
+    color: #b8ada0;
+    margin-bottom: 0.9rem;
   }
 
-  .writing__meta {
+  .writing-card__meta {
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
+    align-items: center;
+    justify-content: space-between;
     gap: 0.55rem;
+    margin-top: auto;
   }
 
-  .writing__tag,
-  .writing__arrow {
+  .writing-card__tag,
+  .writing-card__arrow {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     min-height: 2.3rem;
-    padding: 0.25rem 0.75rem;
+    padding: 0.25rem 0.72rem;
     font-family: var(--font-mono);
     font-size: 0.72rem;
     letter-spacing: 0.1em;
@@ -757,12 +1009,12 @@ const featuredPost = posts[0];
     border: 1px solid rgba(255, 255, 255, 0.08);
   }
 
-  .writing__arrow {
+  .writing-card__arrow {
     min-width: 2.3rem;
     transition: transform 0.25s ease;
   }
 
-  .writing__card:hover .writing__arrow {
+  .writing-card:hover .writing-card__arrow {
     transform: translateX(3px);
   }
 
@@ -823,7 +1075,7 @@ const featuredPost = posts[0];
       top: 21%;
     }
 
-    .evidence--music {
+    .evidence--travelogue {
       left: 18%;
       bottom: 8%;
       width: 62%;
@@ -839,15 +1091,12 @@ const featuredPost = posts[0];
       flex-wrap: wrap;
     }
 
-    .writing__card {
+    .writing-card {
       grid-template-columns: 1fr;
-      align-items: stretch;
     }
 
-    .writing__meta {
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
+    .writing-card__thumb {
+      min-height: 190px;
     }
   }
 
