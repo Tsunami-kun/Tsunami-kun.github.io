@@ -14,25 +14,15 @@ const posts = (await getCollection('posts')).sort(
 const featuredWork = works[0];
 const featuredPost = posts[0];
 
-const postNotes: Record<string, { en: string; zh: string; ja: string }> = {
-  formal_structures_of_complex_networks: {
-    en: 'A reconstructed manuscript on complex networks, Curry–Howard, and what counts as structure.',
-    zh: '一篇从 2021 年手稿重构出的文章，谈复杂网络、Curry–Howard，以及结构究竟是什么。',
-    ja: '2021年の原稿を組み直した一篇で、複雑ネットワークと Curry–Howard、そして構造とは何かを考える。',
-  },
-  'the-anthropomorphism-paradox': {
-    en: 'A note on anthropomorphic priors, body schema, and what embodied AI still has not verified.',
-    zh: '一篇关于拟人先验、身体图式，以及具身智能仍未认真验证之物的笔记。',
-    ja: '擬人化のプライア、身体図式、そして具身AIがまだ十分に検証していないものについてのノート。',
-  },
+const postNotes: Record<string, string> = {
+  formal_structures_of_complex_networks:
+    'Complex networks, Curry-Howard, and formal structure.',
+  'the-anthropomorphism-paradox':
+    'Anthropomorphic priors, body schema, and embodied AI.',
 };
 
 function getPostNote(id: string) {
-  return postNotes[id] ?? {
-    en: 'Notes from travel, research, and long detours.',
-    zh: '一些在路上、研究间隙和长绕路里写下的笔记。',
-    ja: '旅と研究のあいだに書かれたノート。',
-  };
+  return postNotes[id] ?? 'Notes from research, travel, and long detours.';
 }
 
 function formatDate(date: string, locale: string) {
@@ -178,9 +168,7 @@ function formatDate(date: string, locale: string) {
               <div class="evidence__meta">
                 <span class="evidence__tag evidence__tag--dark">Travelogue</span>
                 <p>{featuredPost.data.title}</p>
-                <span class="evidence__caption" data-lang-en>{getPostNote(featuredPost.id).en}</span>
-                <span class="evidence__caption" data-lang-zh>{getPostNote(featuredPost.id).zh}</span>
-                <span class="evidence__caption" data-lang-ja>{getPostNote(featuredPost.id).ja}</span>
+                <span class="evidence__caption">{getPostNote(featuredPost.id)}</span>
               </div>
             </a>
           )}
@@ -223,11 +211,14 @@ function formatDate(date: string, locale: string) {
     <section class="writing container" data-reveal>
       <div class="writing__header">
         <span class="section-marker section-marker--selected" aria-hidden="true">03</span>
-        <h2>
+        <div class="writing__heading">
+          <h2>
           <span data-lang-en>Travelogue</span>
           <span data-lang-zh>游记</span>
           <span data-lang-ja>旅行記</span>
-        </h2>
+          </h2>
+          <p class="writing__subtitle">Notes from research, conferences, and the road.</p>
+        </div>
         <a href={withBase('/travelogue')} class="selected__see-all">
           <span data-lang-en>All travelogue</span>
           <span data-lang-zh>全部游记</span>
@@ -257,9 +248,7 @@ function formatDate(date: string, locale: string) {
                   <span data-lang-ja>{formatDate(post.data.date, 'ja-JP')}</span>
                 </span>
                 <h3 class="writing-card__title">{post.data.title}</h3>
-                <p class="writing-card__excerpt" data-lang-en>{note.en}</p>
-                <p class="writing-card__excerpt" data-lang-zh>{note.zh}</p>
-                <p class="writing-card__excerpt" data-lang-ja>{note.ja}</p>
+                <p class="writing-card__excerpt">{note}</p>
                 <div class="writing-card__meta">
                   <span class="writing-card__tag">Travelogue</span>
                   <span class="writing-card__arrow">&rarr;</span>
@@ -367,9 +356,9 @@ function formatDate(date: string, locale: string) {
       const time = formatPacificTime();
       const temp = typeof weatherText.temp === 'number' ? `${Math.round(weatherText.temp)}°C` : '??°C';
       const wind = typeof weatherText.wind === 'number' ? `${Math.round(weatherText.wind)} km/h` : '-- km/h';
-      targetEn.textContent = `Pacific Time ${time}. San Francisco keeps its collar up: ${temp}, ${weatherText.en}, wind ${wind} off the bay.`;
-      targetZh.textContent = `太平洋时间 ${time}。旧金山把衣领立得很高：${temp}，${weatherText.zh}，海湾来风 ${wind}。`;
-      targetJa.textContent = `太平洋時間 ${time}。サンフランシスコは襟を立てたまま: ${temp}、${weatherText.ja}、湾からの風 ${wind}。`;
+      targetEn.textContent = `Pacific Time ${time}. San Francisco: ${temp}, ${weatherText.en}, wind ${wind}.`;
+      targetZh.textContent = `太平洋时间 ${time}。旧金山：${temp}，${weatherText.zh}，风速 ${wind}。`;
+      targetJa.textContent = `太平洋時間 ${time}。サンフランシスコ：${temp}、${weatherText.ja}、風速 ${wind}。`;
     }
 
     render();
@@ -896,6 +885,20 @@ function formatDate(date: string, locale: string) {
   .writing__header h2 {
     font-size: clamp(1.5rem, 2.6vw, 2.1rem);
     color: #ecd7cc;
+  }
+
+  .writing__heading {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .writing__subtitle {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #bfa386;
   }
 
   .writing__grid {
