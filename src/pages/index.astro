@@ -118,14 +118,6 @@ function formatDate(date: string, locale: string) {
             <span data-lang-zh>关于</span>
             <span data-lang-ja>概要</span>
           </a>
-          <a
-            href={withBase('/files/yanming-shao-cv.pdf')}
-            class="hero__route"
-            target="_blank"
-            rel="noreferrer"
-          >
-            <span>CV</span>
-          </a>
         </nav>
 
         <div class="hero__poetry">
@@ -268,38 +260,30 @@ function formatDate(date: string, locale: string) {
       <span class="section-marker section-marker--selected" aria-hidden="true">03</span>
       <div class="writing__heading">
         <h2>
-          <span data-lang-en>CV & Demo</span>
-          <span data-lang-zh>简历与 Demo</span>
-          <span data-lang-ja>CV とデモ</span>
+          <span data-lang-en>Papers & Demo</span>
+          <span data-lang-zh>论文与 Demo</span>
+          <span data-lang-ja>論文とデモ</span>
         </h2>
-        <p class="writing__subtitle" data-lang-en-block>Updated CV, demo snapshots, and the current publication record.</p>
-        <p class="writing__subtitle" data-lang-zh-block>更新后的简历、demo 截图，以及当前论文列表。</p>
-        <p class="writing__subtitle" data-lang-ja-block>更新した CV、デモのスナップショット、現在の論文一覧です。</p>
+        <p class="writing__subtitle" data-lang-en-block>Current papers, demo snapshots, and ongoing submissions.</p>
+        <p class="writing__subtitle" data-lang-zh-block>当前论文、demo 截图，以及在做和在投的工作。</p>
+        <p class="writing__subtitle" data-lang-ja-block>現在の論文、デモのスナップショット、そして進行中の投稿です。</p>
       </div>
     </div>
 
     <div class="profile__frame">
       <div class="profile__copy">
         <p class="profile__lede" data-lang-en-block>
-          The current CV is available as a PDF, with recent collaboration papers, current submissions,
-          and selected demo material from teleoperation and simulation.
+          Recent collaboration papers, current submissions, and selected demo material from teleoperation
+          and simulation are collected here.
         </p>
         <p class="profile__lede" data-lang-zh-block>
-          这里放更新后的 CV，也把最近的合作论文、当前在投工作，以及一部分遥操作和仿真 demo 放在一起。
+          这里放最近的合作论文、当前在投工作，以及一部分遥操作和仿真 demo。
         </p>
         <p class="profile__lede" data-lang-ja-block>
-          更新した CV に加えて、最近の共同研究論文、投稿中の仕事、そして遠隔操作とシミュレーションのデモをまとめています。
+          最近の共同研究論文、投稿中の仕事、そして遠隔操作とシミュレーションのデモをまとめています。
         </p>
 
         <div class="profile__actions">
-          <a
-            href={withBase('/files/yanming-shao-cv.pdf')}
-            class="profile__action"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Download CV
-          </a>
           <a
             href={withBase('/demo/demo.mp4')}
             class="profile__action"

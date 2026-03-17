@@ -23,6 +23,7 @@ npm-debug.log*
 /*.avif
 /public/audio/lake.mp3
 /public/audio/lofi-bg.mp3
+/public/files/yanming-shao-cv.pdf
 /yanming_cv/*.aux
 /yanming_cv/*.out
 /yanming_cv/*.pdf
