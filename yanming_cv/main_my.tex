@@ -14,7 +14,14 @@
 \usepackage{tabularx} % for making tables with fixed width columns
 \usepackage{array} % tabularx requires this
 \usepackage[dvipsnames]{xcolor} % for coloring text
-\definecolor{primaryColor}{RGB}{0, 79, 144} % define primary color
+\definecolor{primaryColor}{RGB}{54, 91, 122}
+\definecolor{sectioncolor}{RGB}{96, 63, 44}
+\definecolor{linecolor}{RGB}{118, 82, 59}
+\definecolor{synblue}{RGB}{58, 107, 176}
+\definecolor{manorange}{RGB}{222, 133, 48}
+\definecolor{dexteal}{RGB}{41, 140, 133}
+\definecolor{paperfill}{RGB}{249, 244, 238}
+\definecolor{panelborder}{RGB}{205, 189, 176}
 \usepackage{enumitem} % for customizing lists
 \usepackage{fontawesome5} % for using icons
 \usepackage{amsmath} % for math
@@ -28,9 +35,9 @@
 ]{hyperref}
 \hypersetup{
   colorlinks=true,
-  urlcolor=blue,       % make hyperlinks blue
-  linkcolor=blue,      % (if you also want internal links blue)
-  citecolor=blue       % (if you want citations blue)
+  urlcolor=primaryColor,
+  linkcolor=primaryColor,
+  citecolor=primaryColor
 }
 
 \usepackage[pscoord]{eso-pic} % for floating text on the page
@@ -82,10 +89,10 @@
     -1pt
 }{
     % top space:
-    0.3 cm
+    0.22 cm
 }{
     % bottom space:
-    0.2 cm
+    0.16 cm
 } % section title spacing
 
 \renewcommand\labelitemi{$\circ$} % custom bullet points
@@ -113,13 +120,27 @@
     \end{itemize}
 } % new environment for highlights for bullet entries
 
-\definecolor{sectioncolor}{RGB}{128,0,0}
-\definecolor{linecolor}{RGB}{128,0,0}
+\setlist[enumerate]{
+    leftmargin=*,
+    itemsep=0.04 cm,
+    topsep=0.06 cm,
+    parsep=0pt,
+    partopsep=0pt
+}
+
+\setlist[itemize]{
+    itemsep=0.02 cm,
+    topsep=0.06 cm,
+    parsep=0pt,
+    partopsep=0pt
+}
+
 % Defines the rSection environment for the large sections within the CV
 
 \usepackage{xspace}
-\newcommand{\synpoldex}{\textbf{\textsc{SynPolDex}}\xspace}
-\newcommand{\bimangrasp}{\textbf{\textsc{BimanGrasp}}\xspace}
+\newcommand{\synpoldex}{\textbf{SynPolDex}\xspace}
+\newcommand{\bimangrasp}{\textbf{BimanGrasp}\xspace}
+\newcommand{\SynManDexName}{\textcolor{synblue}{\textbf{Syn}}\textcolor{manorange}{\textbf{Man}}\textcolor{dexteal}{\textbf{Dex}}}
 
 \newenvironment{onecolentry}{
     \begin{adjustwidth}{
@@ -143,7 +164,7 @@
 } % new environment for two column entries
 
 \newenvironment{header}{
-    \setlength{\topsep}{0pt}\par\kern\topsep\centering\linespread{1.5}
+    \setlength{\topsep}{0pt}\par\kern\topsep\centering\linespread{1.42}
 }{
     \par\kern\topsep
 } % new environment for the header
@@ -165,8 +186,8 @@
 % new command for external links:
 \renewcommand{\href}[2]{\hrefWithoutArrow{#1}{\ifthenelse{\equal{#2}{}}{ }{#2 }\raisebox{.15ex}{\footnotesize \faExternalLink*}}}
 
-\newcommand{\SynPolDex}{\textbf{\textsc{SynPolDex}}\xspace}
-\newcommand{\BimanGrasp}{\textbf{\textsc{BimanGrasp}}\xspace}
+\newcommand{\SynPolDex}{\textbf{SynPolDex}\xspace}
+\newcommand{\BimanGrasp}{\textbf{BimanGrasp}\xspace}
 
 \begin{document}
     \newcommand{\AND}{\unskip
@@ -180,7 +201,7 @@
     \begin{header}
         \textbf{\fontsize{24 pt}{24 pt}\selectfont YANMING SHAO}
 
-        \vspace{0.3 cm}
+        \vspace{0.24 cm}
 
         \normalsize
         \mbox{{\color{black}\footnotesize\faMapMarker*}\hspace*{0.13cm}ShanghaiTech University, 1 Zhongke Road, Pudong 201210, Shanghai}%
@@ -193,7 +214,7 @@
         \kern 0.25 cm%
         \mbox{\hrefWithoutArrow{tel:+86-180-1906-7367}{\color{black}{\footnotesize\faPhone*}\hspace*{0.13cm}+86-180-1906-7367}}%
         
-        \vspace{0.12 cm}
+        \vspace{0.09 cm}
 
         \mbox{\hrefWithoutArrow{https://tsunami-kun.github.io/}{\color{blue}{\footnotesize\faLink}\hspace*{0.13cm}Homepage}}%
         \kern 0.25 cm%
@@ -218,10 +239,10 @@
     \end{highlightsforbulletentries}
 \end{onecolentry}
 
-\textbf{Scalable Robotic Models}
+\textbf{Scaling Robotic Data}
 \begin{onecolentry}
     \begin{highlightsforbulletentries}
-    \item Exploring scaling law of robotic models, especially  video generation models and large multimodal (forceful, tactile) models that could serve as "brain" of robots.
+    \item Studying how robotic data scales across embodiments, sensors, and task diversity, with emphasis on video, force, and tactile data for general-purpose manipulation models.
     \end{highlightsforbulletentries}
 \end{onecolentry}
 
@@ -244,7 +265,7 @@
         
   \item \textbf{Yanming Shao}, Yan Ding*, and Chenxi Xiao*, 
         ``SynPolDex: Synergizing Fingers via Bi-Level Policy Learning for Dexterous Robotic Hands,'' 
-        \emph{Accepted by Humanoids 2025}.
+        \emph{2025 IEEE-RAS 24th International Conference on Humanoid Robots (Humanoids)}, 2025.
 \end{enumerate}
 
 \textbf{Collaborative Papers}
@@ -262,7 +283,7 @@
 \textbf{In Submission}
 
 \begin{enumerate}[label={[\arabic*]}, resume]
-  \item Bin Qiu*, \textbf{Yanming Shao}, Guanyu Cai, and Yao Mark Mu,
+  \item Bin Qiu, \textbf{Yanming Shao}, Guanyu Cai, and Yao Mark Mu,
         ``Enforcing Human-like Kinematics in Dexterous Piano Playing via Adversarial Posture Regularization.''
 
   \item Kaihan Chen, \textbf{Yanming Shao}, Haifeng Ji, Xiaokang Yang, and Yao Mark Mu,
@@ -301,6 +322,13 @@
         \textit{Robot Interaction and Manipulation (RIM) Lab}
     \end{twocolentry}
 
+    \begin{onecolentry}
+        \begin{highlightsforbulletentries}
+            \item Leading projects on bimanual grasp synthesis, finger-level policy learning, and synthetic human priors for dexterous manipulation.
+            \item Developed \BimanGrasp, \SynPolDex, and the ongoing \SynManDexName{} pipeline for human-like dexterous grasping and manipulation data generation.
+        \end{highlightsforbulletentries}
+    \end{onecolentry}
+
     \vspace{0.2 cm}
 
     \begin{twocolentry}{
@@ -314,60 +342,83 @@
         \textit{Intelligent Photonics and Electronics Center (IPEC)}
     \end{twocolentry}
 
-
-\section{TALKS \& PRESENTATIONS}
-
-\begin{twocolentry}{
-\textit{}    
-    
-\textit{May 2025 (on-line)}}
-    \textbf{IEEE International Conference on Robotics and Automation (ICRA)} 
-    
-    \textit{Bimanual Grasp Synthesis for Dexterous Robot Hands} 
-\end{twocolentry}
-
-\vspace{0.2 cm}
-
-    
-\begin{twocolentry}{
-\textit{}    
-    
-\textit{Dec 2024}}
-    \textbf{ShanghaiTech SI100B: Introduction to Information Science (TA Lecture)}
-
-    \textit{Object Oriented Programming, Git, and Introduction to Game Development}
-\end{twocolentry}
-
-
-\section{TEACHING EXPERIENCES}
-
-\begin{itemize}
-    \item Teaching Assistant, Embodied Intelligence (ShanghaiTech University, 2025 Spring)
-    \item Teaching Assistant, Introduction to Information Science (ShanghaiTech University, 2024 Fall)
-\end{itemize}
-
-\section{SERVICES}
-
-\begin{itemize}
-    \item Reviewer, IEEE Robotics and Automation Letters (RA-L) 
-    \item Reviewer, The 64rd IEEE Conference on Decision and Control (CDC 2025) 
-    \item Reviewer, 2025 IEEE-RAS 24th International Conference on Humanoid Robots (Humanoids 2025)
-\end{itemize}
+    \begin{onecolentry}
+        \begin{highlightsforbulletentries}
+            \item Worked on dexterous manipulation and data-centric embodied AI, spanning policy learning, post-training, multimodal robot data generation, and DexHiL-related collaborations.
+        \end{highlightsforbulletentries}
+    \end{onecolentry}
 
 
 \newpage
 
 
 
+\section{FEATURED PROJECT}
+
+\begin{twocolentry}{
+\textit{}    
+    
+\textit{2025 – Present}}
+\textbf{\SynManDexName}: Human-like Dexterous Grasping from Synthetic Human Priors
+    
+    \textit{Lead project at ShanghaiTech RIM Lab on human-like dexterous grasp synthesis, synthetic demonstration generation, and bimanual manipulation policy learning.}
+
+    \textit{ }
+\end{twocolentry}
+
+\begin{onecolentry}
+\setlength{\fboxsep}{7pt}
+\fcolorbox{panelborder}{paperfill}{
+\parbox{0.965\linewidth}{
+\textit{\SynManDexName{} unifies human-likeness and physical correctness for dexterous grasping. The pipeline first samples human pre-grasps from object geometry with a conditional diffusion model, retargets them to multi-fingered robot hands, refines them with force-closure optimization regularized by human priors, and then converts validated grasps into full arm-hand trajectories for policy learning.}
+}
+}
+\end{onecolentry}
+
+\begin{onecolentry}
+    \begin{highlightsforbulletentries}
+        \item \textbf{SynManDex-Human}: a conditional diffusion model that synthesizes diverse human pre-grasps from object geometry alone.
+        \item \textbf{SynManDex-Optimization}: position-based retargeting plus force-closure refinement, preserving human-like structure while enforcing stable contacts.
+        \item \textbf{SynManDex-ACT}: a unified 36-DoF bimanual policy trained on generated demonstrations, reaching \textbf{71.4\%} grasp-and-lift success and nearly doubling the optimization-only baseline (\textbf{37.1\%}).
+    \end{highlightsforbulletentries}
+\end{onecolentry}
+
+\begin{onecolentry}
+\centering
+\includegraphics[width=.92\linewidth]{img/synmandex_teaser.png}
+
+\vspace{0.12 cm}
+{\small \textbf{\SynManDexName{} at a glance.} Human priors provide natural pre-grasps, physics-based refinement makes them valid for robot hands, and the resulting trajectories support contact-rich bimanual policy learning.}
+
+\vspace{0.24 cm}
+\begin{minipage}[t]{0.54\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{img/synmandex_system.png}
+
+    \vspace{0.12 cm}
+    {\small Three-stage pipeline: pre-grasp diffusion, robot-hand refinement, and geometry-consistent trajectory generation.}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.42\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{img/synmandex_traj.png}
+
+    \vspace{0.12 cm}
+    {\small Qualitative trajectories preserve human-like contact semantics while remaining executable on a 36-DoF bimanual platform.}
+\end{minipage}
+\end{onecolentry}
+
+\newpage
+
 \section{RESEARCH PROJECTS}
 
 \begin{twocolentry}{
 \textit{}    
     
-\textit{ }}
-\textbf{\textsc{BimanGrasp}}\xspace
+\textit{2024}}
+\textbf{BimanGrasp}
     
-    \textit{The project conducted at ShanghaiTech RIM Lab. We proposed the BimanGrasp algorithm (based on stochastic optimization) and generated the first large-scale bimanual dexterous grasping dataset over 900 daily objects.}
+    \textit{Project at ShanghaiTech RIM Lab. We proposed the BimanGrasp pipeline and built a large-scale bimanual dexterous grasp dataset over 900 daily objects.}
 
     \textit{ }
 \end{twocolentry}
@@ -375,14 +426,13 @@
 \begin{figure*}[htpb]
     \centering
     \includegraphics[width=.8\linewidth]{img/BimanGrasp.png}
-    \caption{BimanGrasp enables a pair of dexterous hands to grasp various objects, including large and heavy ones, far beyond 
- the capability of unimanual grasping.}
+    \caption{BimanGrasp enables a pair of dexterous hands to grasp various objects, including large and heavy ones, far beyond the capability of unimanual grasping.}
 \end{figure*}
 
 \begin{figure*}[htpb]
     \centering
     \includegraphics[width=.8\linewidth]{img/bimangrasp_poster.png}
-    \caption{BimanGrasp leveraged differentiable force closure computing to obtain dexterous grasp poses, those poses are valided in Isaac Gym, and construct a large-scale grasp pose dataset called BimanGrasp-Dataset. }
+    \caption{BimanGrasp combines differentiable force closure, validation in Isaac Gym, and large-scale data generation for bimanual dexterous grasping.}
 \end{figure*}
 
 \newpage
@@ -391,9 +441,9 @@
 \textit{ }    
     
 \textit{ }}
-\textbf{\textsc{SynPolDex}}\xspace
+\textbf{SynPolDex}\xspace
     
-    \textit{The project conducted at ShanghaiTech RIM Lab and Shanghai AI Lab IPEC center. We propose the concept and framework of Synergetic Dexterity, which enables human-like finger-level coordination of multi-fingered hands.}
+    \textit{Project at ShanghaiTech RIM Lab and Shanghai AI Lab IPEC. SynPolDex introduces bi-level policy learning for finger-role planning and low-level coordination in multi-fingered robot hands.}
 
     \textit{ }
 \end{twocolentry}
@@ -418,9 +468,9 @@
 \textit{}    
     
 \textit{ }}
-\textbf{\textsc{CleverGrasp}}\xspace
+\textbf{CleverGrasp}\xspace
     
-    \textit{The project was conducted in ShanghaiTech RIM Lab, which leverated both differentiable force closure and finger-level planning for dexterous grasping. It first initialize a pose based on finger planning, then optimize to reach a stable pose with such finger prior.}
+    \textit{Project at ShanghaiTech RIM Lab. CleverGrasp combines differentiable force closure with finger-level planning, using semantic finger priors to initialize dexterous grasp optimization.}
 
     \textit{ }
 \end{twocolentry}
@@ -434,23 +484,66 @@
 \section{SELECTED DEMOS}
 
 \begin{onecolentry}
-Recent demo snapshots from dexterous teleoperation and simulation. Video: \hrefWithoutArrow{https://tsunami-kun.github.io/demo/demo.mp4}{online demo}
+Recent demo snapshots from dexterous teleoperation and simulation. Full video: \hrefWithoutArrow{https://tsunami-kun.github.io/demo/demo.mp4}{online demo}
 \end{onecolentry}
 
 \begin{figure*}[ht]
     \centering
     \begin{minipage}[t]{0.6\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{demo_image/sim.jpg}
+        \includegraphics[width=\linewidth]{demo_image/demo_frame.jpg}
     \end{minipage}
     \hfill
     \begin{minipage}[t]{0.32\linewidth}
         \centering
         \includegraphics[width=\linewidth]{demo_image/noitum_glove.jpg}
     \end{minipage}
-    \caption{Left: a dexterous manipulation simulation snapshot used for policy debugging and evaluation. Right: the Noitom glove setup used for teleoperation and data collection.}
+    \caption{Left: a representative frame from the dexterous manipulation demo video. Right: the Noitom glove setup used for teleoperation and data collection.}
     \label{fig:selected-demos}
 \end{figure*}
+
+\section{TALKS \& PRESENTATIONS}
+
+\begin{twocolentry}{
+\textit{}
+
+\textit{May 2025 (on-line)}}
+    \textbf{IEEE International Conference on Robotics and Automation (ICRA)}
+
+    \textit{Bimanual Grasp Synthesis for Dexterous Robot Hands}
+\end{twocolentry}
+
+\vspace{0.15 cm}
+
+\begin{twocolentry}{
+\textit{}
+
+\textit{Dec 2024}}
+    \textbf{ShanghaiTech SI100B: Introduction to Information Science (TA Lecture)}
+
+    \textit{Object Oriented Programming, Git, and Introduction to Game Development}
+\end{twocolentry}
+
+\section{TEACHING EXPERIENCES}
+
+\begin{itemize}
+    \item Teaching Assistant, Embodied Intelligence (ShanghaiTech University, 2025 Spring)
+    \item Teaching Assistant, Introduction to Information Science (ShanghaiTech University, 2024 Fall)
+\end{itemize}
+
+\section{SERVICES}
+
+\begin{itemize}
+    \item Reviewer, IEEE Robotics and Automation Letters (RA-L)
+    \item Reviewer, The 64rd IEEE Conference on Decision and Control (CDC 2025)
+    \item Reviewer, 2025 IEEE-RAS 24th International Conference on Humanoid Robots (Humanoids 2025)
+\end{itemize}
+
+\section{OPEN SOURCE}
+
+\begin{itemize}
+    \item Maintainer, \hrefWithoutArrow{https://github.com/Tsunami-kun/awesome-humanoid-manipulation}{Awesome Humanoid Manipulation} (100+ GitHub stars), a curated map of human-like manipulation, dexterous grasping, and humanoid research directions.
+\end{itemize}
 
 \section{SELECTED COURSE PROJECTS}
 
@@ -458,7 +551,7 @@ Recent demo snapshots from dexterous teleoperation and simulation. Video: \hrefW
 \textit{}    
     
 \textit{2023 Fall (Mobile Manipulation Course, A)}}
-\textbf{\textsc{KiwiPicker}}\xspace
+\textbf{KiwiPicker}\xspace
     
     \textit{Using a complete robotic system (AgileX Bunker + CR5 Arm + LiDAR + 2 RealSense D435 Cameras + Parallel Gripper), we implemented a full pipeline integrating navigation, object recognition, grasp detection, and robotic arm control. }
 
@@ -482,7 +575,7 @@ Recent demo snapshots from dexterous teleoperation and simulation. Video: \hrefW
 
 
 \textit{2024 Spring (Intro to Algebraic Geometry, A)}}
-\textbf{\textsc{Obstructions in Geometric Complexity Theory}}\xspace
+\textbf{Obstructions in Geometric Complexity Theory}\xspace
     
     \textit{In this project, I conducted a literature view on the newest advancement in geometric complexity theory. Specfically, I surveyed obstruction method, which is a promising way to answer if $\mathsf{VP} \neq \mathsf{VNP}$, which is the geometric analogy of the famous $\mathsf{P} \neq \mathsf{NP}$ problem.}
 
