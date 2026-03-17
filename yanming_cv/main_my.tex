@@ -375,14 +375,19 @@
     \textit{ }
 \end{twocolentry}
 
+\vspace{0.04 cm}
+
 \begin{onecolentry}
-\setlength{\fboxsep}{7pt}
+\setlength{\fboxsep}{8pt}
 \fcolorbox{panelborder}{paperfill}{
 \parbox{0.965\linewidth}{
+\linespread{1.04}\selectfont
 \textit{\SynManDexName{} unifies human-likeness and physical correctness for dexterous grasping. The pipeline first samples human pre-grasps from object geometry with a conditional diffusion model, retargets them to multi-fingered robot hands, refines them with force-closure optimization regularized by human priors, and then converts validated grasps into full arm-hand trajectories for policy learning.}
 }
 }
 \end{onecolentry}
+
+\vspace{0.05 cm}
 
 \begin{onecolentry}
     \begin{highlightsforbulletentries}
@@ -392,28 +397,30 @@
     \end{highlightsforbulletentries}
 \end{onecolentry}
 
+\vspace{0.03 cm}
+
 \begin{onecolentry}
 \centering
 \includegraphics[width=.92\linewidth]{img/synmandex_teaser.png}
 
-\vspace{0.12 cm}
-{\small \textbf{\SynManDexName{} at a glance.} Human priors provide natural pre-grasps, physics-based refinement makes them valid for robot hands, and the resulting trajectories support contact-rich bimanual policy learning.}
+\vspace{0.14 cm}
+{\small \linespread{1.03}\selectfont \textbf{\SynManDexName{} at a glance.} Human priors provide natural pre-grasps, physics-based refinement makes them valid for robot hands, and the resulting trajectories support contact-rich bimanual policy learning.\par}
 
-\vspace{0.24 cm}
+\vspace{0.28 cm}
 \begin{minipage}[t]{0.54\linewidth}
     \centering
     \includegraphics[width=\linewidth]{img/synmandex_system.png}
 
-    \vspace{0.12 cm}
-    {\small Three-stage pipeline: pre-grasp diffusion, robot-hand refinement, and geometry-consistent trajectory generation.}
+    \vspace{0.13 cm}
+    {\small \linespread{1.03}\selectfont Three-stage pipeline: pre-grasp diffusion, robot-hand refinement, and geometry-consistent trajectory generation.\par}
 \end{minipage}
 \hfill
 \begin{minipage}[t]{0.42\linewidth}
     \centering
     \includegraphics[width=\linewidth]{img/synmandex_traj.png}
 
-    \vspace{0.12 cm}
-    {\small Qualitative trajectories preserve human-like contact semantics while remaining executable on a 36-DoF bimanual platform.}
+    \vspace{0.13 cm}
+    {\small \linespread{1.03}\selectfont Qualitative trajectories preserve human-like contact semantics while remaining executable on a 36-DoF bimanual platform.\par}
 \end{minipage}
 \end{onecolentry}
 
