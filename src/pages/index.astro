@@ -13,54 +13,6 @@ const posts = (await getCollection('posts')).sort(
 );
 const featuredWork = works[0];
 const featuredPost = posts[0];
-const publicationRecords = [
-  {
-    kind: 'lead',
-    label: 'Lead',
-    title: 'Bimanual Grasp Synthesis for Dexterous Robot Hands',
-    note: 'IEEE RA-L 2024',
-    href: withBase('/works/bimangrasp'),
-  },
-  {
-    kind: 'lead',
-    label: 'Lead',
-    title: 'SynPolDex: Synergizing Fingers via Bi-Level Policy Learning for Dexterous Robotic Hands',
-    note: 'Humanoids 2025',
-    href: withBase('/works/synpoldex'),
-  },
-  {
-    kind: 'lead',
-    label: 'Lead',
-    title: 'SynManDex: Human-like Dexterous Grasping from Synthetic Human Priors',
-    note: 'in submission',
-  },
-  {
-    kind: 'collab',
-    label: 'Collab',
-    title: 'DexHiL: A Human-in-the-Loop Framework for Vision-Language-Action Model Post-Training in Dexterous Manipulation',
-    note: 'arXiv 2026',
-    href: 'https://arxiv.org/abs/2603.09121',
-  },
-  {
-    kind: 'collab',
-    label: 'Collab',
-    title: 'RoboRouter: Training-Free Policy Routing for Robotic Manipulation',
-    note: 'arXiv 2026',
-    href: 'https://arxiv.org/abs/2603.07892',
-  },
-  {
-    kind: 'submission',
-    label: 'Submission',
-    title: 'Enforcing Human-like Kinematics in Dexterous Piano Playing via Adversarial Posture Regularization',
-    note: 'with Bin Qiu, Guanyu Cai, and Yao Mark Mu',
-  },
-  {
-    kind: 'submission',
-    label: 'Submission',
-    title: 'V2P-Manip: Learning Single-hand Dexterous Manipulation from Monocular Human Videos',
-    note: 'with Kaihan Chen, Haifeng Ji, Xiaokang Yang, and Yao Mark Mu',
-  },
-];
 
 const postNotes: Record<string, string> = {
   formal_structures_of_complex_networks:
@@ -71,14 +23,6 @@ const postNotes: Record<string, string> = {
 
 function getPostNote(id: string) {
   return postNotes[id] ?? 'Notes from research and travel.';
-}
-
-function formatDate(date: string, locale: string) {
-  return new Date(date).toLocaleDateString(locale, {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  });
 }
 ---
 
@@ -255,119 +199,10 @@ function formatDate(date: string, locale: string) {
     </div>
   </section>
 
-  <section class="profile container" data-reveal>
-    <div class="profile__header">
-      <span class="section-marker section-marker--selected" aria-hidden="true">03</span>
-      <div class="writing__heading">
-        <h2>
-          <span data-lang-en>Papers & Demo</span>
-          <span data-lang-zh>论文与 Demo</span>
-          <span data-lang-ja>論文とデモ</span>
-        </h2>
-        <p class="writing__subtitle" data-lang-en-block>Current papers, demo snapshots, and ongoing submissions.</p>
-        <p class="writing__subtitle" data-lang-zh-block>当前论文、demo 截图，以及在做和在投的工作。</p>
-        <p class="writing__subtitle" data-lang-ja-block>現在の論文、デモのスナップショット、そして進行中の投稿です。</p>
-      </div>
-    </div>
-
-    <div class="profile__frame">
-      <div class="profile__copy">
-        <p class="profile__lede" data-lang-en-block>
-          Recent collaboration papers, current submissions, and selected demo material from teleoperation
-          and simulation are collected here.
-        </p>
-        <p class="profile__lede" data-lang-zh-block>
-          这里放最近的合作论文、当前在投工作，以及一部分遥操作和仿真 demo。
-        </p>
-        <p class="profile__lede" data-lang-ja-block>
-          最近の共同研究論文、投稿中の仕事、そして遠隔操作とシミュレーションのデモをまとめています。
-        </p>
-
-        <div class="profile__actions">
-          <a
-            href={withBase('/demo/demo.mp4')}
-            class="profile__action"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Demo Video
-          </a>
-          <a
-            href="https://scholar.google.com/citations?user=gHy232gAAAAJ&hl=en"
-            class="profile__action"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Google Scholar
-          </a>
-          <a
-            href="https://github.com/Tsunami-kun/awesome-humanoid-manipulation"
-            class="profile__action"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Awesome List
-          </a>
-        </div>
-
-        <div class="profile__papers">
-          {publicationRecords.map((record) => (
-            <article class={`profile__paper profile__paper--${record.kind}`}>
-              <span class={`profile__paper-tag profile__paper-tag--${record.kind}`}>{record.label}</span>
-              {record.href ? (
-                <a
-                  href={record.href}
-                  class="profile__paper-title"
-                  target={record.href.startsWith('http') ? '_blank' : undefined}
-                  rel={record.href.startsWith('http') ? 'noreferrer' : undefined}
-                >
-                  {record.title}
-                </a>
-              ) : (
-                <p class="profile__paper-title">{record.title}</p>
-              )}
-              <p class="profile__paper-note">{record.note}</p>
-            </article>
-          ))}
-        </div>
-      </div>
-
-      <div class="profile__visuals" aria-label="Demo snapshots">
-        <figure class="profile-shot profile-shot--wide">
-          <img
-            src={withBase('/demo/demo-frame.jpg')}
-            alt="Representative frame from a dexterous manipulation demo."
-            class="profile-shot__image profile-shot__image--wide"
-            loading="lazy"
-          />
-          <figcaption>
-            <span data-lang-en>Representative demo frame</span>
-            <span data-lang-zh>Demo 截图</span>
-            <span data-lang-ja>デモの代表フレーム</span>
-          </figcaption>
-        </figure>
-
-        <figure class="profile-shot profile-shot--tall">
-          <img
-            src={withBase('/demo/noitum-glove.jpg')}
-            alt="Noitom glove teleoperation setup."
-            class="profile-shot__image profile-shot__image--tall"
-            loading="lazy"
-          />
-          <figcaption>
-            <span data-lang-en>Noitom glove setup</span>
-            <span data-lang-zh>Noitom 手套遥操作</span>
-            <span data-lang-ja>Noitom グローブの遠隔操作</span>
-          </figcaption>
-        </figure>
-      </div>
-    </div>
-  </section>
-
-  {posts.length > 0 && (
+  {featuredPost && (
     <section class="writing container" data-reveal>
       <div class="writing__header">
-        <span class="section-marker section-marker--selected" aria-hidden="true">04</span>
+        <span class="section-marker section-marker--selected" aria-hidden="true">03</span>
         <div class="writing__heading">
           <h2>
           <span data-lang-en>Travelogue</span>
@@ -384,36 +219,26 @@ function formatDate(date: string, locale: string) {
       </div>
 
       <div class="writing__grid">
-        {posts.map((post) => {
-          const note = getPostNote(post.id);
-          return (
-            <a href={withBase(`/travelogue/${post.id}`)} class="writing-card">
-              {post.data.thumbnail && (
-                <div class="writing-card__thumb-wrap">
-                  <img
-                    src={withBase(post.data.thumbnail)}
-                    alt={post.data.title}
-                    class="writing-card__thumb"
-                    loading="lazy"
-                  />
-                </div>
-              )}
-              <div class="writing-card__body">
-                <span class="writing-card__date">
-                  <span data-lang-en>{formatDate(post.data.date, 'en-US')}</span>
-                  <span data-lang-zh>{formatDate(post.data.date, 'zh-CN')}</span>
-                  <span data-lang-ja>{formatDate(post.data.date, 'ja-JP')}</span>
-                </span>
-                <h3 class="writing-card__title">{post.data.title}</h3>
-                <p class="writing-card__excerpt">{note}</p>
-                <div class="writing-card__meta">
-                  <span class="writing-card__tag">Travelogue</span>
-                  <span class="writing-card__arrow">&rarr;</span>
-                </div>
-              </div>
-            </a>
-          );
-        })}
+        <a href={withBase(`/travelogue/${featuredPost.id}`)} class="writing-card">
+          {featuredPost.data.thumbnail && (
+            <div class="writing-card__thumb-wrap">
+              <img
+                src={withBase(featuredPost.data.thumbnail)}
+                alt={featuredPost.data.title}
+                class="writing-card__thumb"
+                loading="lazy"
+              />
+            </div>
+          )}
+          <div class="writing-card__body">
+            <h3 class="writing-card__title">{featuredPost.data.title}</h3>
+            <p class="writing-card__excerpt">{getPostNote(featuredPost.id)}</p>
+            <div class="writing-card__meta">
+              <span class="writing-card__tag">Travelogue</span>
+              <span class="writing-card__arrow">&rarr;</span>
+            </div>
+          </div>
+        </a>
       </div>
     </section>
   )}
@@ -1026,178 +851,6 @@ function formatDate(date: string, locale: string) {
     z-index: 1;
   }
 
-  .profile {
-    margin-top: 2rem;
-  }
-
-  .profile__header {
-    display: flex;
-    align-items: baseline;
-    gap: 0.8rem;
-    margin-bottom: 1.2rem;
-  }
-
-  .profile__header h2 {
-    font-size: clamp(1.5rem, 2.6vw, 2.1rem);
-    color: #ecd7cc;
-  }
-
-  .profile__frame {
-    display: grid;
-    grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
-    gap: 1rem;
-    align-items: start;
-  }
-
-  .profile__copy,
-  .profile__visuals {
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    background: linear-gradient(180deg, rgba(16, 16, 18, 0.8), rgba(23, 24, 28, 0.88));
-    box-shadow: 0 34px 56px -48px rgba(0, 0, 0, 0.72);
-  }
-
-  .profile__copy {
-    padding: 1rem;
-  }
-
-  .profile__lede {
-    margin-bottom: 0.9rem;
-    line-height: 1.72;
-    color: #d0c0af;
-  }
-
-  .profile__actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    margin-bottom: 1rem;
-  }
-
-  .profile__action {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 2.5rem;
-    padding: 0.4rem 0.8rem;
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: #ead3b2;
-    background: rgba(15, 16, 18, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    transition:
-      transform 0.25s ease,
-      color 0.25s ease,
-      border-color 0.25s ease;
-  }
-
-  .profile__action:hover {
-    transform: translateY(-2px);
-    color: #f4dec0;
-    border-color: rgba(187, 142, 93, 0.28);
-  }
-
-  .profile__papers {
-    display: grid;
-    gap: 0.7rem;
-  }
-
-  .profile__paper {
-    padding: 0.8rem 0.9rem;
-    border: 1px solid rgba(113, 93, 73, 0.22);
-    background: linear-gradient(180deg, rgba(244, 237, 226, 0.96), rgba(228, 220, 206, 0.94));
-    color: #211c18;
-  }
-
-  .profile__paper-tag {
-    display: inline-flex;
-    margin-bottom: 0.42rem;
-    padding: 0.2rem 0.48rem;
-    font-family: var(--font-mono);
-    font-size: 0.62rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    background: rgba(28, 23, 19, 0.9);
-    color: #f1ddc5;
-  }
-
-  .profile__paper-tag--lead {
-    background: rgba(54, 31, 24, 0.92);
-    color: #f2dbc1;
-  }
-
-  .profile__paper-tag--collab {
-    background: rgba(41, 58, 68, 0.92);
-    color: #d8ecef;
-  }
-
-  .profile__paper-tag--submission {
-    background: rgba(88, 66, 26, 0.92);
-    color: #f0e2bc;
-  }
-
-  .profile__paper-title {
-    display: block;
-    margin: 0;
-    color: #251f1a;
-    line-height: 1.45;
-    text-decoration: none;
-  }
-
-  a.profile__paper-title:hover {
-    color: #7d3a2d;
-  }
-
-  .profile__paper-note {
-    margin-top: 0.38rem;
-    color: #72574a;
-    font-size: 0.82rem;
-    line-height: 1.5;
-  }
-
-  .profile__visuals {
-    display: grid;
-    grid-template-columns: minmax(0, 1.15fr) minmax(180px, 0.85fr);
-    gap: 0.75rem;
-    padding: 0.85rem;
-  }
-
-  .profile-shot {
-    margin: 0;
-    border: 1px solid rgba(92, 80, 66, 0.28);
-    background: linear-gradient(180deg, rgba(244, 239, 230, 0.97), rgba(228, 220, 207, 0.95));
-    overflow: hidden;
-  }
-
-  .profile-shot__image {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    filter: saturate(0.88) contrast(1.04);
-  }
-
-  .profile-shot__image--wide {
-    min-height: 260px;
-    animation: profile-pan-wide 18s ease-in-out infinite alternate;
-  }
-
-  .profile-shot__image--tall {
-    min-height: 260px;
-    animation: profile-pan-tall 20s ease-in-out infinite alternate;
-  }
-
-  .profile-shot figcaption {
-    padding: 0.55rem 0.7rem 0.7rem;
-    font-family: var(--font-mono);
-    font-size: 0.64rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: #744b39;
-  }
-
   .writing {
     margin-top: 2rem;
   }
@@ -1295,18 +948,8 @@ function formatDate(date: string, locale: string) {
     color: #231d19;
   }
 
-  .writing-card__date {
-    display: inline-flex;
-    margin-bottom: 0.55rem;
-    font-family: var(--font-mono);
-    font-size: 0.67rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: #c7a574;
-  }
-
   .writing-card__title {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.65rem;
     color: #efdfce;
     line-height: 1.22;
   }
@@ -1360,26 +1003,6 @@ function formatDate(date: string, locale: string) {
     }
   }
 
-  @keyframes profile-pan-wide {
-    0% {
-      object-position: 18% 48%;
-    }
-
-    100% {
-      object-position: 82% 52%;
-    }
-  }
-
-  @keyframes profile-pan-tall {
-    0% {
-      object-position: 50% 12%;
-    }
-
-    100% {
-      object-position: 50% 78%;
-    }
-  }
-
   @media (max-width: 960px) {
     .hero__frame {
       grid-template-columns: 1fr;
@@ -1397,9 +1020,6 @@ function formatDate(date: string, locale: string) {
       transform: none;
     }
 
-    .profile__frame {
-      grid-template-columns: 1fr;
-    }
   }
 
   @media (max-width: 640px) {
@@ -1447,15 +1067,6 @@ function formatDate(date: string, locale: string) {
       flex-wrap: wrap;
     }
 
-    .profile__visuals {
-      grid-template-columns: 1fr;
-    }
-
-    .profile-shot__image--wide,
-    .profile-shot__image--tall {
-      min-height: 220px;
-    }
-
     .writing-card {
       grid-template-columns: 1fr;
     }
@@ -1467,7 +1078,7 @@ function formatDate(date: string, locale: string) {
 
   @media (prefers-reduced-motion: reduce) {
     .evidence__photo,
-    .profile-shot__image {
+    .writing-card__thumb {
       animation: none;
     }
   }
