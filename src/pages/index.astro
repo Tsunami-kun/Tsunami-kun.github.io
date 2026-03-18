@@ -13,6 +13,7 @@ const posts = (await getCollection('posts')).sort(
 );
 const featuredWork = works[0];
 const featuredPost = posts[0];
+const featuredPosts = posts.slice(0, 2);
 
 const postNotes: Record<string, string> = {
   formal_structures_of_complex_networks:
@@ -199,7 +200,7 @@ function getPostNote(id: string) {
     </div>
   </section>
 
-  {featuredPost && (
+  {featuredPosts.length > 0 && (
     <section class="writing container" data-reveal>
       <div class="writing__header">
         <span class="section-marker section-marker--selected" aria-hidden="true">03</span>
@@ -219,26 +220,28 @@ function getPostNote(id: string) {
       </div>
 
       <div class="writing__grid">
-        <a href={withBase(`/travelogue/${featuredPost.id}`)} class="writing-card">
-          {featuredPost.data.thumbnail && (
-            <div class="writing-card__thumb-wrap">
-              <img
-                src={withBase(featuredPost.data.thumbnail)}
-                alt={featuredPost.data.title}
-                class="writing-card__thumb"
-                loading="lazy"
-              />
+        {featuredPosts.map((post) => (
+          <a href={withBase(`/travelogue/${post.id}`)} class="writing-card">
+            {post.data.thumbnail && (
+              <div class="writing-card__thumb-wrap">
+                <img
+                  src={withBase(post.data.thumbnail)}
+                  alt={post.data.title}
+                  class="writing-card__thumb"
+                  loading="lazy"
+                />
+              </div>
+            )}
+            <div class="writing-card__body">
+              <h3 class="writing-card__title">{post.data.title}</h3>
+              <p class="writing-card__excerpt">{getPostNote(post.id)}</p>
+              <div class="writing-card__meta">
+                <span class="writing-card__tag">Travelogue</span>
+                <span class="writing-card__arrow">&rarr;</span>
+              </div>
             </div>
-          )}
-          <div class="writing-card__body">
-            <h3 class="writing-card__title">{featuredPost.data.title}</h3>
-            <p class="writing-card__excerpt">{getPostNote(featuredPost.id)}</p>
-            <div class="writing-card__meta">
-              <span class="writing-card__tag">Travelogue</span>
-              <span class="writing-card__arrow">&rarr;</span>
-            </div>
-          </div>
-        </a>
+          </a>
+        ))}
       </div>
     </section>
   )}
