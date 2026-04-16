@@ -8,8 +8,9 @@
     "dev:native": "astro dev",
     "dev:stable": "CHOKIDAR_USEPOLLING=true CHOKIDAR_INTERVAL=150 astro dev",
     "dev:host": "CHOKIDAR_USEPOLLING=true CHOKIDAR_INTERVAL=150 astro dev --host --port 4321",
-    "build": "astro build",
+    "build": "astro build && node scripts/verify-public-output.mjs",
     "preview": "astro preview",
+    "verify:public": "node scripts/verify-public-output.mjs",
     "new:post": "node scripts/new-content.mjs post",
     "new:work": "node scripts/new-content.mjs work",
     "astro": "astro"

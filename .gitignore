@@ -11,6 +11,8 @@ npm-debug.log*
 /*.7z
 /*.rar
 /*.pdf
+/private/
+/yanming_cv/
 /CLAUDE.md
 /AGENTS.md
 /how_to_use.md
@@ -24,7 +26,3 @@ npm-debug.log*
 /public/audio/lake.mp3
 /public/audio/lofi-bg.mp3
 /public/files/yanming-shao-cv.pdf
-/yanming_cv/*.aux
-/yanming_cv/*.out
-/yanming_cv/*.pdf
-/yanming_cv/*.synctex.gz
